@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import '../style/dons.css';
+import HorairesOuverture from '../components/HorairesOuverture.astro';
+import InfoDons from '../components/InfoDons.astro';
+import BlocCollecte from '../components/BlocCollecte.astro';
+
+// Récupération dynamique des collectes acceptées
+const collectesResponse = await fetch(`${import.meta.env.API_URL}/clothing-examples?accepted=true`);
+const collectesData = await collectesResponse.json();
+const collectesDetails = Array.isArray(collectesData)
+  ? collectesData.map(item => ({ image: item.imageUrl, texte: item.description }))
+  : [];
+
+// Récupération dynamique des collectes non acceptées
+const nonCollectesResponse = await fetch(`${import.meta.env.API_URL}/clothing-examples?accepted=false`);
+const nonCollectesData = await nonCollectesResponse.json();
+const nonCollectesDetails = Array.isArray(nonCollectesData)
+  ? nonCollectesData.map(item => ({ image: item.imageUrl, texte: item.description }))
+  : [];
+
+const response = await fetch(`${import.meta.env.API_URL}/text-donations`);
+const data = await response.json();
+const textDonation = {
+  messageSchedule: data[0]?.messageSchedule || '',
+  messageAdvertising: data[0]?.messageAdvertising || '',
+  imageUrl: data[0]?.imageUrl || '',
+  flyerPdfUrl: data[0]?.flyerPdfUrl || ''
+};
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+---
+
+<Layout 
+  title="Nouvoulook - Faire un don"
+  description="Faites un don à l'association Nouvoulook à Marcq-en-Baroeul : vêtements, objets, meubles. Soutenez notre projet solidaire et découvrez comment donner."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/dons"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': "Faites un don à l'association Nouvoulook à Marcq-en-Baroeul : vêtements, objets, meubles. Soutenez notre projet solidaire et découvrez comment donner.",
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <main class="container-fluid py-5 dons-main-with-wave position-relative p-5">
+    <div class="dons-bg-wave">
+      <svg viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path fill="#ffa14e" fill-opacity="1" d="M0,160 C360,2040 1080,80 1440,160 L1440,0 L0,0 Z"></path>
+      </svg>
+    </div>
+    <div class="row justify-content-center align-items-center gy-4 mb-4 position-relative dons-hero-row">
+      <div class="col-md-6 position-relative">
+        <div class="dons-yellow-box dons-overlap p-4">
+          <h1 class="mb-0 dons-yellow-title">Vous souhaitez effectuer un don ?</h2>
+        </div>
+      </div>
+      <div class="col-md-6 text-center position-relative">
+        {textDonation.imageUrl && (
+          <img
+            src={textDonation.imageUrl.startsWith('/assets') ? `${apiUrl}${textDonation.imageUrl}` : textDonation.imageUrl}
+            alt="Donner des vêtements"
+            class="img-fluid rounded dons-img-real mx-auto mb-2"
+            id="don-img"
+          />
+        )}
+      </div>
+    </div>
+    <HorairesOuverture icone="⏰" texte={textDonation.messageSchedule} />
+    <InfoDons
+      icone="🤲"
+      texte={textDonation.messageAdvertising}
+    />
+  
+
+    <section class="mt-5 pt-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-6 mb-4 fade-in-scroll">
+          <BlocCollecte titre="Nous collectons" color="#e09c2b" details={collectesDetails} />
+        </div>
+        <div class="col-12 col-lg-6 mb-4 fade-in-scroll">
+          <BlocCollecte titre="Nous ne collectons pas" color="#e23e57" details={nonCollectesDetails} />
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5 fade-in-scroll">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
+            <div class="text-center mb-4">
+              <i class="bi bi-file-earmark-text-fill fs-1 mb-3" style="color:#ffa14e;"></i>
+              <h3 class="fw-bold" style="color:#ffa14e;">Téléchargez notre flyer</h3>
+              <p class="mb-4">Retrouvez toutes les informations importantes sur notre flyer</p>
+              {textDonation.flyerPdfUrl && (
+                <a href={textDonation.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${textDonation.flyerPdfUrl}` : textDonation.flyerPdfUrl} class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#ffa14e; border-color:#ffa14e;" download>
+                  <i class="bi bi-download me-2"></i>Télécharger le flyer
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('don-img');
+    if (img) {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+     
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+    }
+
+    const els = document.querySelectorAll('.fade-in-scroll');
+    const observer = new window.IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    els.forEach(el => observer.observe(el));
+  });
+</script>

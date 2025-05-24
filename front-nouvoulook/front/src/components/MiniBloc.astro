@@ -1,0 +1,12 @@
+---
+export interface Props {
+  image?: string
+  texte: string
+}
+const { image, texte } = Astro.props;
+const apiUrl = import.meta.env.PUBLIC_API_URL;
+---
+<article class="mini-bloc d-flex align-items-center mb-2">
+  {image && <img src={apiUrl + image} alt="" class="mini-bloc-img me-2" />}
+  <span>{texte}</span>
+</article> 

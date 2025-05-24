@@ -1,0 +1,46 @@
+---
+const logoPath = "/assets/logo-nouvoulook.png";
+const logoAirPath = "/assets/by-air.png";
+
+---
+
+<!-- Composant pour afficher le header (logo, menu, bouton) -->
+
+<header class="navbar navbar-expand-md bg-white shadow-sm py-2">
+  <div class="container">
+    <a class="navbar-brand d-flex flex-column align-items-center justify-content-center" href="/">
+     
+      <span class="fw-bold" style="font-size:2.2rem; background: linear-gradient(90deg, #ffe066, #f76707, #d72660); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Nouvoulook</span>
+      <img src={logoAirPath} alt="by AIR" style="height: 24px; margin-top: 0.1rem; display: block;" class="header-byair-img" id="header-byair-img" />
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+        <li class="nav-item"><a class="nav-link" href="/concept">Concept</a></li>
+        <li class="nav-item"><a class="nav-link" href="/historique">Histoire</a></li>
+        <li class="nav-item"><a class="nav-link" href="/dons">Dons</a></li>
+        <li class="nav-item"><a class="nav-link" href="/benevolat">Bénévolat</a></li>
+        <li class="nav-item"><a class="nav-link" href="/ou-nous-trouver">Où nous trouver</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+
+
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('header-byair-img');
+    if (img) {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+    }
+  });
+</script>

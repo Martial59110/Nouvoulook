@@ -1,0 +1,22 @@
+---
+import MiniBloc from './MiniBloc.astro';
+export interface Props {
+  image?: string
+  titre?: string
+  texte?: string
+  color?: string
+  details?: { image?: string, texte: string }[]
+}
+const { image, titre, texte, color = "#e23e57", details } = Astro.props;
+const apiUrl = import.meta.env.PUBLIC_API_URL;
+---
+<section class="bloc-collecte mb-4" style={`border-top: 6px solid ${color};`}>
+  {image && <img src={apiUrl + image} alt={titre} class="bloc-collecte-img mb-2" />}
+  {titre && <h3 class="bloc-collecte-titre" style={`color:${color}`}>{titre}</h3>}
+  <div class="bloc-collecte-texte">
+    {Array.isArray(details) && details.length > 0
+      ? details.map(item => <MiniBloc image={item.image} texte={item.texte} />)
+      : texte && <div set:html={texte}></div>
+    }
+  </div>
+</section> 

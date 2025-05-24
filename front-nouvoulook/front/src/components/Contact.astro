@@ -1,0 +1,133 @@
+---
+const imageBoutiquePath = "/assets/boutique.png";
+import '../style/contact.css';
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+---
+  
+<div class="container py-5">
+  <div class="row align-items-center justify-content-center">
+    <div class="col-12 col-md-6 mb-4 mb-md-0 text-center">
+      <img src={imageBoutiquePath} alt="Boutique Nouvoulook" class="img-fluid rounded shadow" style="max-width:100%;border-radius:2rem;" />
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+      <div class="contact-yellow-box w-100 my-3 py-5">
+        <h1 class="contact-title mb-0">Nous contacter</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
+        <h3 class="mb-4 text-center fw-bold" style="color:#e23e57;">Veuillez remplir le formulaire ci-dessous :</h3>
+        <form id="contact-form">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="nom" class="form-label">Nom</label>
+              <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+            <div class="col-md-6">
+              <label for="prenom" class="form-label">Prénom</label>
+              <input type="text" class="form-control" id="prenom" name="prenom" required>
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="col-md-6">
+              <label for="telephone" class="form-label">Téléphone <i><small>(optionnel)</small></i></label>
+              <input type="tel" class="form-control" id="telephone" name="telephone">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Votre message</label>
+            <textarea class="form-control" id="message" name="message" rows="8" required></textarea>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">Envoyer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ apiUrl }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(form));
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Envoi en cours...';
+        
+        const res = await fetch(`${apiUrl}/contact-form`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            type: 'contact',
+            sujet: 'Nouveau message de contact'
+          })
+        });
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Erreur lors de l\'envoi');
+        
+        alert('Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
+        form.reset();
+      } catch (err) {
+        alert('Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.');
+        console.error('Erreur:', err);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
+    });
+  });
+</script>
+
+<style>
+  .contact-yellow-box {
+    background: linear-gradient(135deg, #FAFF63 80%, #fffbe0 100%);
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 #faff6380, 0 2px 8px #0001;
+    border: 2px solid #f7e96b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .contact-yellow-box:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 48px 0 #faff63cc, 0 4px 16px #0002;
+  }
+  .contact-title {
+    color: #2d2d2d;
+    font-size: 2.5rem;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin: 0;
+    text-shadow: 0 2px 8px #fff8, 0 1px 0 #faff63;
+  }
+  @media (max-width: 767px) {
+    .contact-yellow-box {
+      min-height: 120px;
+      padding: 2rem 1rem;
+      border-radius: 1.2rem;
+    }
+    .contact-title {
+      font-size: 2rem;
+    }
+  }
+</style>

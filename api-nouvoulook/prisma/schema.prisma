@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String           @id @default(uuid())
+  email         String          @unique
+  password      String
+  firstname     String?
+  lastname      String?
+  roles         String[]        @default(["user"]) @map("roles")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  partner       Partner?        // Relation one-to-one
+  news          News[]          // Relation one-to-many
+  textDonations TextDonation[]  // Relation one-to-many
+  textVolunteer TextVolunteer?  // Relation one-to-one
+  clothingExamples ClothingExample[] // Relation one-to-many
+
+  @@map("users")
+}
+
+model Partner {
+  id        String   @id @default(uuid())
+  name      String
+  imageUrl  String   @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    String?   @unique @map("user_id")
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("partners")
+}
+
+model News {
+  id          String   @id @default(uuid())
+  title       String
+  textContent String   @map("text_content")
+  imageUrl    String   @map("image_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String?   @map("user_id")
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("news")
+}
+
+model TextDonation {
+  id                String   @id @default(uuid())
+  messageSchedule   String   @map("message_schedule") @db.Text
+  messageAdvertising String  @map("message_advertising") @db.Text
+  imageUrl          String?  @map("image_url") 
+  flyerPdfUrl        String?  @map("flyer_pdf_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  userId            String?   @map("user_id")
+  user              User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("text_donations")
+}
+
+model TextVolunteer {
+  id          String   @id @default(uuid())
+  imageUrl    String   @map("image_url")
+  textContent String   @map("text_content")
+  flyerPdfUrl String?  @map("flyer_pdf_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String?   @unique @map("user_id")
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("text_volunteers")
+}
+
+model ClothingExample {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  imageUrl    String   @map("image_url")
+  accepted    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String?   @map("user_id")
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("clothing_examples")
+}
+
+model PageView {
+  id        String   @id @default(uuid())
+  path      String
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([ipAddress, userAgent, createdAt])
+  @@map("page_views")
+}
+
+model Permissions {
+  id          String   @id @default(uuid())
+  role        String   // Le rôle concerné (admin, user, etc.)
+  resource    String   // La ressource concernée (news, partners, etc.)
+  action      String   // L'action autorisée (create, read, update, delete)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([role, resource, action])
+  @@map("permissions")
+}
+
+model Picto {
+  id    Int    @id @default(autoincrement())
+  url   String @unique
+  // Ajoute d'autres champs si besoin (ex: nom, date, etc.)
+}
+
+model ContactInfo {
+  id          String   @id @default(uuid())
+  smtpUser    String   // Identifiant SMTP (utilisé pour Nodemailer)
+  smtpPass    String   // Mot de passe SMTP (utilisé pour Nodemailer)
+  publicEmail String   // Email affiché sur le site
+  phone       String   // Numéro affiché sur le site
+  address     String   // Adresse affichée sur le site
+  openingHours String?  // Horaires affichés sur le site
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model History {
+  id            String         @id @default(uuid())
+  imageUrl      String?
+  image1        String?
+  image2        String?
+  image3        String?
+  textContent   String?
+  textContent2  String?
+  textContent3  String?
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  
+
+  @@map("history")
+}
+
+model TimelineItem {
+  id          String   @id @default(uuid())
+  year        String
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("timeline_items")
+}
+
+model Boutique {
+  id        String   @id @default(uuid())
+  imageUrl  String   @map("image_url")
+  image1    String?
+  image2    String?
+  image3    String?
+  image4    String?
+  image5    String?
+  image6    String?
+  image7    String?
+  image8    String?
+  image9    String?
+  image10   String?
+  image11   String?
+  image12   String?
+  image13   String?
+  image14   String?
+  flyerPdfUrl String? @map("flyer_pdf_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("boutique")
+}

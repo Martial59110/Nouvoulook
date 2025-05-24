@@ -1,0 +1,39 @@
+---
+import '../style/dons.css';
+
+const response = await fetch(`${import.meta.env.API_URL}/history`);
+const data = await response.json();
+const history = {
+  imageUrl: data[0]?.imageUrl || '',
+  textContent: data[0]?.textContent || '',
+  textContent2: data[0]?.textContent2 || '',
+  textContent3: data[0]?.textContent3 || ''
+};
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+---
+  
+<main class="container-fluid py-5 dons-main-with-wave position-relative p-5">
+  <div class="dons-bg-wave">
+    <svg viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path fill="#f9eb50" fill-opacity="1" d="M0,160 C360,2040 1080,80 1440,160 L1440,0 L0,0 Z"></path>
+    </svg>
+  </div>
+  <div class="row justify-content-center align-items-center gy-4 mb-4 position-relative dons-hero-row">
+    <div class="col-md-6 position-relative">
+      <div class="dons-yellow-box dons-overlap p-4">
+        <h1 class="mb-0 dons-yellow-title">Notre histoire</h2>
+      </div>
+    </div>
+    <div class="col-md-6 text-center position-relative">
+      {history.imageUrl && (
+        <img
+          src={history.imageUrl.startsWith('/assets') ? `${apiUrl}${history.imageUrl}` : history.imageUrl}
+          alt="Histoire de la boutique"
+          class="img-fluid rounded dons-img-real mx-auto mb-2"
+          id="don-img"
+        />
+      )}
+    </div>
+  </div>
+</main>

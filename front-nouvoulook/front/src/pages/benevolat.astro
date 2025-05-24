@@ -1,0 +1,261 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import '../style/benevolat.css';
+
+const response = await fetch(`${import.meta.env.API_URL}/text-volunteers`);
+const data = await response.json();
+const textVolunteer = {
+ 
+  textContent: data[0]?.textContent || '',
+  imageUrl: data[0]?.imageUrl || '',
+  flyerPdfUrl: data[0]?.flyerPdfUrl || ''
+};
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+let successMessage = "";
+let errorMessage = "";
+---
+
+<Layout 
+  title="Nouvoulook - Faire du bénévolat"
+  description="Rejoignez l'association Nouvoulook comme bénévole à Marcq-en-Baroeul. Découvrez comment vous engager et participer à notre projet solidaire."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/benevolat"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': "Rejoignez l'association Nouvoulook comme bénévole à Marcq-en-Baroeul. Découvrez comment vous engager et participer à notre projet solidaire.",
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <main class="container-fluid py-5 dons-main-with-wave position-relative p-5">
+    <div class="dons-bg-wave">
+      <svg viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path fill="#8c4154" fill-opacity="1" d="M0,160 C360,2040 1080,80 1440,160 L1440,0 L0,0 Z"></path>
+      </svg>
+    </div>
+    <div class="row justify-content-center align-items-center gy-4 mb-4 position-relative dons-hero-row">
+      <div class="col-md-6 position-relative">
+        <div class="dons-yellow-box dons-overlap p-4">
+          <h1 class="mb-0 benevolat-purple-title">Vous souhaitez devenir bénévole ?</h2>
+        </div>
+      </div>
+      <div class="col-md-6 text-center position-relative">
+        {textVolunteer.imageUrl && (
+          <img
+            src={textVolunteer.imageUrl.startsWith('/assets') ? `${apiUrl}${textVolunteer.imageUrl}` : textVolunteer.imageUrl}
+            alt="Devenir bénévole"
+            class="img-fluid rounded dons-img-real mx-auto mb-2"
+            id="don-img"
+          />
+        )}
+      </div>
+    </div>
+    <!-- Début du contenu après le hero -->
+    <section class="container py-5 fade-in-scroll">
+      <div class="row align-items-center mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <h2 class="mb-4 fw-bold" style="font-size:2.2rem; color:#e23e57;">Pourquoi devenir bénévole&nbsp;?</h2>
+          <div set:html={textVolunteer.textContent} />
+        </div>
+        <div class="col-lg-6">
+          <div class="row g-4">
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm h-100 animate__animated animate__fadeInUp">
+                <div class="card-body text-center">
+                  <div class="mb-3 fs-1" style="color:#e23e57;"><i class="bi bi-person-badge-fill"></i></div>
+                  <h5 class="card-title mb-2" style="color:#e23e57;">Accueil &amp; conseil</h5>
+                  <p class="card-text">Accueillir les visiteurs, les conseiller et partager la bonne humeur dans la boutique.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm h-100 animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="card-body text-center">
+                  <div class="mb-3 fs-1" style="color:#fc4811;"><i class="bi bi-box-seam"></i></div>
+                  <h5 class="card-title mb-2" style="color:#fc4811;">Réception des dons</h5>
+                  <p class="card-text">Les bénévoles réceptionnent les vêtements, jouets, meubles et objets de décoration donnés par les particuliers ou les entreprises.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm h-100 animate__animated animate__fadeInUp animate__delay-2s">
+                <div class="card-body text-center">
+                  <div class="mb-3 fs-1" style="color:#e09c2b;"><i class="bi bi-calendar-event-fill"></i></div>
+                  <h5 class="card-title mb-2" style="color:#e09c2b;">Événementiel</h5>
+                  <p class="card-text">Participer à l'organisation d'événements et d'animations solidaires.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm h-100 animate__animated animate__fadeInUp animate__delay-3s">
+                <div class="card-body text-center">
+                  <div class="mb-3 fs-1" style="color:#d72660;"><i class="bi bi-stars"></i></div>
+                  <h5 class="card-title mb-2" style="color:#d72660;"> Logistique &amp; gestion des stocks</h5>
+                  <p class="card-text">Trier les dons, préparer les articles pour la vente et valoriser chaque don reçu.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5 fade-in-scroll">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
+            <div class="text-center mb-4">
+              <i class="bi bi-file-earmark-text-fill fs-1 mb-3" style="color:#e23e57;"></i>
+              <h3 class="fw-bold" style="color:#e23e57;">Charte des bénévoles</h3>
+              <p class="mb-4">Téléchargez notre charte des bénévoles pour comprendre nos valeurs et nos engagements</p>
+              {textVolunteer.flyerPdfUrl && (
+                <a
+                  href={textVolunteer.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${textVolunteer.flyerPdfUrl}` : textVolunteer.flyerPdfUrl}
+                  class="btn btn-primary btn-lg animate__animated animate__fadeInUp"
+                  style="background:#e23e57; border-color:#e23e57;"
+                  download
+                >
+                  <i class="bi bi-download me-2"></i>Télécharger la charte
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5 fade-in-scroll">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
+            <h3 class="mb-4 text-center fw-bold" style="color:#e23e57;">Envie de nous rejoindre&nbsp;?</h3>
+            <form id="contact-form">
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="nom" class="form-label">Nom</label>
+                  <input type="text" class="form-control" id="nom" name="nom" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="prenom" class="form-label">Prénom</label>
+                  <input type="text" class="form-control" id="prenom" name="prenom" required>
+                </div>
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="telephone" class="form-label">Téléphone</label>
+                  <input type="tel" class="form-control" id="telephone" name="telephone">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="disponibilites" class="form-label">Disponibilités</label>
+                <textarea class="form-control" id="disponibilites" name="disponibilites" rows="2" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="motivation" class="form-label">Votre motivation</label>
+                <textarea class="form-control" id="motivation" name="motivation" rows="3" required></textarea>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">Envoyer ma candidature</button>
+              </div>
+              <div id="success-message" class="alert alert-success mt-3" style="display:none"></div>
+              <div id="error-message" class="alert alert-danger mt-3" style="display:none"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script define:vars={{ apiUrl }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('don-img');
+    if (img) {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+     
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+    }
+
+    const els = document.querySelectorAll('.fade-in-scroll');
+    const observer = new window.IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    els.forEach(el => observer.observe(el));
+
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    const successDiv = document.getElementById('success-message');
+    const errorDiv = document.getElementById('error-message');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(form));
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      try {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Envoi en cours...';
+        const res = await fetch(`${apiUrl}/contact-form`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            type: 'benevolat',
+            sujet: 'Nouvelle candidature bénévole'
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          form.reset();
+          successDiv.textContent = "Merci pour votre message ! Nous vous répondrons dès que possible.";
+          successDiv.style.display = "block";
+          errorDiv.style.display = "none";
+        } else {
+          const errorData = await res.json();
+          errorDiv.textContent = errorData.message || "Une erreur s'est produite lors de l'envoi du formulaire. Veuillez réessayer.";
+          errorDiv.style.display = "block";
+          successDiv.style.display = "none";
+        }
+      } catch (error) {
+        errorDiv.textContent = "Une erreur s'est produite. Vérifiez votre connexion ou réessayez plus tard.";
+        errorDiv.style.display = "block";
+        successDiv.style.display = "none";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
+    });
+  });
+</script>
+
+<style>
+.btn.btn-primary.btn-lg {
+  transition: transform 0.18s cubic-bezier(.4,2,.6,1), box-shadow 0.18s;
+}
+.btn.btn-primary.btn-lg:hover, .btn.btn-primary.btn-lg:focus {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px 0 #e23e5740, 0 2px 8px #0001;
+}
+</style>

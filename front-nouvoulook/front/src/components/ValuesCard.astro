@@ -1,0 +1,164 @@
+<!-- Composant pour afficher les différentes valeurs du projet -->
+
+<article class="values-section">
+    <div class="container">
+        <header>
+            <h2>Une boutique née autour <br> de quatre valeurs</h2>
+        </header>
+        
+        <ul class="values-grid" role="list" aria-label="Nos valeurs fondamentales">
+            <li class="value-card">
+                <article>
+                    <h3>Développement de la mixité sociale</h3>
+                </article>
+            </li>
+            
+            <li class="value-card">
+                <article>
+                    <h3>Respect de la dignité</h3>
+                </article>
+            </li>
+            
+            <li class="value-card">
+                <article>
+                    <h3>Respect de la différence</h3>
+                </article>
+            </li>
+            
+            <li class="value-card">
+                <article>
+                    <h3>Développement durable</h3>
+                </article>
+            </li>
+        </ul>
+
+        <div class="local-discount-text">
+            <p>
+                Notre boutique s'engage à créer un espace où la différence devient un vecteur de rassemblement social. Nous croyons en un espace qui respecte la dignité de chacun, célèbre nos différences et contribue activement au développement durable. À travers nos actions, nous souhaitons favoriser la mixité sociale.
+            </p>
+        </div>
+    </div>
+</article>
+
+<style>
+    .values-section {
+        padding: clamp(2rem, 6vh, 4rem) 0;
+        background-color: #ffffff;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 clamp(1rem, 3vw, 2rem);
+    }
+
+    h2 {
+        position: relative;
+        text-align: left;
+        left: 2%;
+        color: #D52151;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 100;
+        width: fit-content;
+        margin: clamp(30px, 5vh, 50px) 0 clamp(2rem, 5vh, 4rem);
+        padding-bottom: 1rem;
+        border-bottom: 2px solid currentColor;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+        gap: clamp(2rem, 4vw, 6rem);
+        list-style: none;
+        padding: 0;
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+
+    .value-card {
+        display: flex;
+        min-height: clamp(120px, 20vh, 150px);
+        padding: clamp(1.5rem, 3vw, 2rem);
+        color: white;
+        background-color: #3B82F6;
+        border-radius: clamp(0.5rem, 1vw, 1rem);
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+    .value-card article {
+        width: 100%;
+    }
+
+    .value-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .value-card h3 {
+        width: 100%;
+        margin: 0;
+        font-size: clamp(1.1rem, 2vw, 1.25rem);
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .local-discount-text {
+        text-align: center;
+        padding-top: 5rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .local-discount-text p {
+        color: #666;
+        font-size: clamp(1.1rem, 2vw, 1.5rem);
+        line-height: 1.5;
+        font-weight: 300;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        h2 {
+            right: 15%;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        h2 {
+            text-align: center;
+            margin: clamp(30px, 5vh, 50px) auto clamp(2rem, 5vh, 4rem);
+        }
+
+        .values-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            text-align: center;
+            margin: clamp(20px, 4vh, 30px) auto clamp(1rem, 4vh, 2rem);
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+        }
+
+        .values-grid {
+            gap: clamp(1.5rem, 3vw, 2rem);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .values-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .value-card {
+            min-height: 100px;
+        }
+
+        .local-discount-text {
+            margin-top: 2rem;
+        }
+    }
+</style>

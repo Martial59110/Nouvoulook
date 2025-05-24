@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import PageViewTracker from '../components/PageViewTracker.svelte';
+import NewsCarousel from '../components/NewsCarousel.svelte';
+
+
+
+const newsResponse = await fetch(`${import.meta.env.API_URL}/news`);
+const newsList: { id: string; title: string; textContent: string; imageUrl: string; createdAt: string; }[] = await newsResponse.json();
+
+let currentIndex = 0;
+const pageSize = 4;
+function showPrev() {
+  currentIndex = Math.max(0, currentIndex - pageSize);
+}
+function showNext() {
+  if (currentIndex + pageSize < newsList.length) {
+    currentIndex += pageSize;
+  }
+}
+const pagedNews = newsList.slice(currentIndex, currentIndex + pageSize);
+---
+
+<Layout 
+  title="Nouvoulook - Accueil"
+  description="Nouvoulook : boutique solidaire à Marcq-en-Baroeul, dons, bénévolat, histoire, contact. Découvrez notre projet associatif et nos actualités."
+  ogImage="/assets/boutique.png"
+  canonical="https://nouvoulook.fr/"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': 'Boutique solidaire à Marcq-en-Baroeul, dons, bénévolat, histoire, contact.',
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <div class="container-fluid py-5 position-relative" style="max-width: 100vw;">
+    <div class="d-flex justify-content-center align-items-center flex-column position-relative" style="min-height: 60vh;">
+      <div class="hero-img-wrapper position-relative w-100 d-flex justify-content-center" style="max-width: 1200px;">
+        <img src="/assets/boutique.png" alt="Nouvoulook" class="img-fluid hero-img-main shadow" style="width: 80vw; max-width: 1000px; border-radius: 2.5rem;" />
+        <div class="hero-orange-box position-absolute">
+          <h1 class="hero-title mb-0">Un projet solidaire<br>à but non lucratif</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 4rem;"></div>
+
+  <section class="container my-5 pt-5 mt-5">
+    <NewsCarousel client:load newsList={newsList} />
+  </section>
+ 
+  <PageViewTracker client:load />
+</Layout>
+
+<style>
+.hero-img-wrapper {
+  min-height: 400px;
+}
+.hero-img-main {
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 8px 32px 0 #e87c3d40, 0 2px 8px #0001;
+  
+  min-height: 180px;
+  object-fit: cover;
+}
+.hero-orange-box {
+  left: 0;
+  bottom: 0;
+  transform: translateY(40%);
+  background: #e87c3dcc;
+  border-radius: 2.5rem;
+  color: #fff;
+  padding: 3.5rem 3rem 2.5rem 3rem;
+  min-width: 420px;
+  max-width: 60vw;
+  box-shadow: 0 8px 32px 0 #e87c3d40, 0 2px 8px #0001;
+  z-index: 2;
+}
+.hero-title {
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .hero-img-main {
+    width: 98vw;
+    max-width: 98vw;
+    border-radius: 1.5rem;
+    aspect-ratio: 4/3;
+    min-height: 140px;
+    object-fit: cover;
+  }
+  .hero-orange-box {
+    min-width: 0;
+    max-width: 90vw;
+    padding: 2rem 1rem;
+    border-radius: 1.2rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: translateY(30%);
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 600px) {
+  .hero-img-main {
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0.7rem;
+    aspect-ratio: 4/3;
+    min-height: 120px;
+    object-fit: cover;
+  }
+  .hero-orange-box {
+    padding: 1.2rem 0.5rem;
+    border-radius: 0.7rem;
+    transform: translateY(20%);
+  }
+  .hero-title {
+    font-size: 1.2rem;
+  }
+}
+.news-featured-card {
+  min-height: 180px;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+}
+.news-featured-img-wrapper {
+  flex: 0 0 140px;
+  max-width: 140px;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+.news-featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 380px;
+  max-height: 380px;
+  border-top-left-radius: 1.2rem;
+  border-bottom-left-radius: 1.2rem;
+}
+@media (max-width: 900px) {
+  .news-featured-card {
+    flex-direction: column;
+    min-height: unset;
+    border-radius: 1rem;
+    max-width: 98vw !important;
+  }
+  .news-featured-img-wrapper {
+    max-width: 100%;
+    flex: unset;
+    height: 180px;
+  }
+  .news-featured-img {
+    border-radius: 1rem 1rem 0 0;
+    min-height: 120px;
+    max-height: 180px;
+  }
+}
+</style>

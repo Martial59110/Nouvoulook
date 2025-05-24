@@ -1,0 +1,91 @@
+/*
+  Développé avec ❤️ par Martial Floquet
+  Portfolio : https://martial-portfolio.netlify.app/
+*/
+/* @import 'bootstrap/dist/css/bootstrap.min.css'; */
+
+.header-byair-img {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+  }
+  .header-byair-img.loaded {
+    opacity: 1;
+    transform: none;
+  }
+
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+}
+.fade-in-scroll.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.navbar-nav .nav-link {
+  color: #ad003a;
+  font-weight: 500;
+  font-size: 1.08rem;
+  letter-spacing: 0.5px;
+  position: relative;
+  transition: color 0.18s;
+  margin: 0 0.7rem;
+  padding-bottom: 0.2rem;
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:focus,
+.navbar-nav .nav-link:hover {
+  color: #ff6f3c;
+}
+
+.navbar-nav .nav-link::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #ffe066, #ff6f3c, #e23e57);
+  border-radius: 2px;
+  transition: width 0.25s;
+  margin: 0 auto;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+  width: 80%;
+}
+.footer-site {
+  background: #fffde7;
+ 
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  box-shadow: none;
+}
+
+.footer-logo {
+  font-size: 1.3rem !important;
+  color: #e9b949 !important;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-shadow: none;
+  text-decoration: none;
+}
+
+.footer-links a {
+  color: #444;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-links a:hover {
+  color: #e23e57;
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  color: #aaa;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}

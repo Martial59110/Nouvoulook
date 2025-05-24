@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String
+  firstname        String?
+  lastname         String?
+  roles            String[]          @default(["user"]) @map("roles")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  partner          Partner? // Relation one-to-one
+  news             News[] // Relation one-to-many
+  textDonations    TextDonation[] // Relation one-to-many
+  textVolunteer    TextVolunteer? // Relation one-to-one
+  clothingExamples ClothingExample[] // Relation one-to-many
+
+  @@map("users")
+}
+
+model Partner {
+  id        String   @id @default(uuid())
+  name      String
+  imageUrl  String   @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    String   @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("partners")
+}
+
+model News {
+  id          String   @id @default(uuid())
+  title       String
+  textContent String   @map("text_content")
+  imageUrl    String   @map("image_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("news")
+}
+
+model TextDonation {
+  id                 String   @id @default(uuid())
+  messageSchedule    String   @map("message_schedule")
+  messageAdvertising String   @map("message_advertising")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+  userId             String   @map("user_id")
+  user               User     @relation(fields: [userId], references: [id])
+
+  @@map("text_donations")
+}
+
+model TextVolunteer {
+  id          String   @id @default(uuid())
+  imageUrl    String   @map("image_url")
+  textContent String   @map("text_content")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String   @unique @map("user_id")
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("text_volunteers")
+}
+
+model ClothingExample {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  imageUrl    String   @map("image_url")
+  accepted    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("clothing_examples")
+}
+
+model PageView {
+  id        String   @id @default(uuid())
+  path      String
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("page_views")
+}

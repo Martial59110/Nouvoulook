@@ -1,0 +1,85 @@
+# Node.js dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Test and coverage artifacts
+test/
+tests/
+coverage/
+*.spec.*
+*.e2e-spec.*
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Version control
+.git/
+.gitignore
+.svn/
+.hg/
+
+# Environment and secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.crt
+
+# Local/temporary files and folders
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Documentation and markdown
+README*
+*.md
+docs/
+
+# Docker and Compose files
+Dockerfile*
+docker-compose*
+
+# Project-specific caches and artifacts
+.astro/
+.angular/
+.prisma/
+
+# Miscellaneous
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+*.log
+
+# Ignore lock files (explicitly, as per instructions)
+!package-lock.json
+!yarn.lock
+!pnpm-lock.yaml
+
+# Ignore config overrides
+config.local.*
+*.local.yml
+
+# Ignore backup files
+*.bak
+
+# Ignore database artifacts
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignore migration lock files
+migration_lock.toml
+
+# Ignore public assets that are not needed (if any)
+# (Uncomment and specify if needed)
+# public/assets/

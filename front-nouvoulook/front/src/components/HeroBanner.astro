@@ -1,0 +1,55 @@
+---
+const imageBoutiquePath = "/assets/boutique.png";
+---
+  
+  <div class="hero-content">
+    <div class="text-overlay">
+      <h1>Un projet solidaire<br>à but non lucratif</h1>
+    </div>
+    <img src={imageBoutiquePath} alt="Boutique Nouvoulook" class="hero-image" />
+  </div>
+</div>
+
+<style>
+
+  .hero-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .hero-image {
+    position: absolute;
+    left: 23%;
+    top: 0;
+    width: 70%;
+    height: 85%;
+    border-radius: 10%;
+    object-fit: cover;
+    padding: 2rem;
+  }
+
+  .text-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 45%;
+    top: 45%;
+    background-color: rgba(223, 116, 54, 0.9);
+    padding: 2.5rem;
+    border-radius: 30px;
+    width: 45%;
+    height: 40%;
+    z-index: 1000;
+  }
+
+  .text-overlay h1 {
+    color: white;
+    font-size: 3.5rem;
+    align-items: left;
+    margin: 0;
+    font-weight: 150;
+  }
+</style>

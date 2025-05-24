@@ -1,0 +1,43 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Connexion à l'espace admin</h2>
+    <form (ngSubmit)="onSubmit()" autocomplete="off">
+     
+      <input type="text" style="display:none" autocomplete="username" />
+      <input type="password" style="display:none" autocomplete="new-password" />
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="email" name="login_email" required autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" [(ngModel)]="password" name="login_password" required autocomplete="new-password" />
+      </div>
+      <div class="form-group text-end">
+        <a class="forgot-link" href="#" (click)="openForgotModal($event)">Mot de passe oublié&nbsp;?</a>
+      </div>
+      <div class="form-group remember-me">
+        <input id="rememberMe" type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" />
+        <label for="rememberMe">Se souvenir de moi</label>
+      </div>
+      <button class="login-btn" type="submit" [disabled]="!isFormValid()">Se connecter</button>
+      <div *ngIf="error" class="error">{{ error }}</div>
+    </form>
+    <!-- Modale de réinitialisation du mot de passe -->
+    <div class="modal-backdrop" *ngIf="showForgotModal" (click)="closeForgotModal()"></div>
+    <div class="modal-reset" *ngIf="showForgotModal">
+      <div class="modal-content">
+        <h3>Réinitialisation du mot de passe</h3>
+        <form (ngSubmit)="onForgotSubmit()">
+          <div class="form-group">
+            <label for="resetEmail">Votre email</label>
+            <input id="resetEmail" type="email" [(ngModel)]="resetEmail" name="resetEmail" required autocomplete="email" />
+          </div>
+          <button type="submit" class="login-btn">Envoyer le lien de réinitialisation</button>
+          <button type="button" class="btn-cancel" (click)="closeForgotModal()">Annuler</button>
+        </form>
+        <div *ngIf="resetMessage" class="reset-message">{{ resetMessage }}</div>
+      </div>
+    </div>
+  </div>
+</div>

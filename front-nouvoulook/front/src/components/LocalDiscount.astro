@@ -1,0 +1,110 @@
+<article class="values-section">
+    <div class="container">
+        <header>
+            <h2>Une réduction réservée <br> aux Marcquois</h2>
+        </header>
+        <div class="discount-content">
+            <div class="text-content">
+                <p>Pour les habitants de la ville de Marcq-en-Baroeul, une réduction spéciale est mise en place par Nouvoulook</p>
+                <p>Cette dernière dépend de votre quotient familial (sous attestation CAF)</p>
+            </div>
+            <div class="logo-container">
+                <img src="/assets/marcq-logo.png" alt="Logo de Marcq-en-Baroeul" class="marcq-logo">
+            </div>
+        </div>
+    </div>
+</article>
+
+<style>
+    h2 {
+        position: relative;
+        text-align: left;
+        left: 5%;
+        color: #D52151;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 100;
+        width: fit-content;
+        margin: clamp(30px, 5vh, 50px) 0 clamp(2rem, 5vh, 4rem);
+        padding-bottom: 1rem;
+        border-bottom: 2px solid currentColor;
+    }
+
+    .discount-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: clamp(2rem, 4vw, 4rem);
+        padding: 0 clamp(1rem, 2vw, 2rem);
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .text-content {
+        flex: 1;
+        position: relative;
+        left: 8%;
+        text-align: left;
+        max-width: 600px;
+    }
+
+    .text-content p {
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+        line-height: 1.3;
+        margin-bottom: 1.5rem;
+        font-weight: 300;
+    }
+
+    .logo-container {
+        flex: 0 0 auto;
+        max-width: min(400px, 30vw);
+        margin-right: clamp(1rem, 2vw, 2rem);
+        display: flex;
+        align-items: center;
+    }
+
+    .marcq-logo {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        h2 {
+            right: 15%;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        h2 {
+            text-align: center;
+            margin: clamp(30px, 5vh, 50px) auto clamp(2rem, 5vh, 4rem);
+        }
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            text-align: center;
+            margin: clamp(20px, 4vh, 30px) auto clamp(1rem, 4vh, 2rem);
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+        }
+
+        .discount-content {
+            flex-direction: column;
+            gap: clamp(1.5rem, 4vh, 2rem);
+            padding: 0 clamp(0.5rem, 2vw, 1rem);
+        }
+
+        .text-content {
+            left: 0;
+            text-align: center;
+            max-width: 100%;
+            padding: 0 clamp(1rem, 4vw, 2rem);
+        }
+
+        .logo-container {
+            max-width: min(250px, 60vw);
+            margin: clamp(1rem, 4vh, 2rem) auto 0;
+            justify-content: center;
+        }
+    }
+</style>

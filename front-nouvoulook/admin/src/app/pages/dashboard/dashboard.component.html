@@ -1,0 +1,71 @@
+<div class="container-fluid dashboard-bootstrap">
+  <div class="row">
+    <!-- Sidebar -->
+    <button class="btn btn-menu d-xl-none" (click)="sidebarOpen = true">
+      <span class="material-icons">menu</span>
+    </button>
+    <nav *ngIf="permissionsLoaded" class="col-md-2 d-none d-xl-block bg-white sidebar py-4" [class.sidebar-open]="sidebarOpen">
+      <div class="profile mb-4">
+        <div class="avatar">{{ firstname.charAt(0) }}{{ lastname.charAt(0) }}</div>
+        <div class="profile-info">
+          <span class="profile-name">{{ firstname }} {{ lastname }}</span>
+        </div>
+      </div>
+      <ul class="nav flex-column sidebar-nav mb-4">
+        <li class="nav-item"><a routerLink="./" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{exact:true}" (click)="sidebarOpen = false"><span class="material-icons">home</span> Accueil</a></li>
+        <li class="nav-item" *ngIf="hasAccess('users')"><a routerLink="users" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">group</span> Utilisateurs</a></li>
+        <li class="nav-item" *ngIf="hasAccess('donations')"><a routerLink="donations" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">volunteer_activism</span> Dons</a></li>
+        <li class="nav-item" *ngIf="hasAccess('volunteers')"><a routerLink="volunteers" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">diversity_3</span> Bénévoles</a></li>
+        <li class="nav-item" *ngIf="hasAccess('news')"><a routerLink="news" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">campaign</span> Actualités</a></li>
+        <li class="nav-item" *ngIf="hasAccess('partners')"><a routerLink="partners" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">handshake</span> Partenaires</a></li>
+        <li class="nav-item" *ngIf="hasAccess('contact')"><a routerLink="contact" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">email</span> Contact</a></li>
+        <li class="nav-item" *ngIf="hasAccess('history')"><a routerLink="history" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">history_edu</span> Histoire</a></li>
+        <li class="nav-item" *ngIf="hasAccess('boutique')"><a routerLink="boutique" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">storefront</span> Boutique</a></li>
+      </ul>
+      <button class="btn btn-outline-secondary w-100 mb-2" routerLink="settings" routerLinkActive="active" (click)="sidebarOpen = false"><span class="material-icons">settings</span> Paramètres</button>
+    </nav>
+
+    <div *ngIf="!permissionsLoaded" class="col-md-2 d-none d-md-block py-4 text-center align-items-center justify-content-center">
+      <div>Chargement des permissions...</div>
+    </div>
+
+    <!-- Drawer mobile -->
+    <div class="sidebar-drawer d-xl-none" [class.open]="sidebarOpen">
+      <div class="sidebar-content">
+        <button class="btn btn-close" (click)="sidebarOpen = false"><span class="material-icons">close</span></button>
+        <div class="profile mb-4">
+          <div class="avatar">{{ firstname.charAt(0) }}{{ lastname.charAt(0) }}</div>
+          <div class="profile-info">
+            <span class="profile-name">{{ firstname }} {{ lastname }}</span>
+          </div>
+        </div>
+        <ul class="nav flex-column sidebar-nav mb-4">
+          <li class="nav-item"><a routerLink="./" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{exact:true}" (click)="sidebarOpen = false"><span class="material-icons">home</span> Accueil</a></li>
+          <li class="nav-item" *ngIf="hasAccess('users')"><a routerLink="users" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">group</span> Utilisateurs</a></li>
+          <li class="nav-item" *ngIf="hasAccess('donations')"><a routerLink="donations" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">volunteer_activism</span> Dons</a></li>
+          <li class="nav-item" *ngIf="hasAccess('volunteers')"><a routerLink="volunteers" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">diversity_3</span> Bénévoles</a></li>
+          <li class="nav-item" *ngIf="hasAccess('news')"><a routerLink="news" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">campaign</span> Actualités</a></li>
+          <li class="nav-item" *ngIf="hasAccess('partners')"><a routerLink="partners" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">handshake</span> Partenaires</a></li>
+          <li class="nav-item" *ngIf="hasAccess('contact')"><a routerLink="contact" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">email</span> Contact</a></li>
+          <li class="nav-item" *ngIf="hasAccess('history')"><a routerLink="history" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">history_edu</span> Histoire</a></li>
+          <li class="nav-item" *ngIf="hasAccess('boutique')"><a routerLink="boutique" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">storefront</span> Boutique</a></li>
+        </ul>
+        <button class="btn btn-outline-secondary w-100 mb-2" routerLink="settings" routerLinkActive="active" (click)="sidebarOpen = false"><span class="material-icons">settings</span> Paramètres</button>
+        <button class="btn btn-primary logout-btn w-100 mt-3" (click)="logout()">Déconnexion</button>
+      </div>
+      <div class="sidebar-backdrop" (click)="sidebarOpen = false"></div>
+    </div>
+
+    <!-- Main content -->
+    <main class="col-md-7 ms-sm-auto px-md-4 py-4 main-content">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+      </div>
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Right panel -->
+    <aside class="col-md-3 d-none d-md-block right-panel py-4">
+      <button class="btn btn-primary logout-btn w-100" (click)="logout()">Déconnexion</button>
+    </aside>
+  </div>
+</div> 

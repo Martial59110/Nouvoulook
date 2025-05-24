@@ -1,0 +1,28 @@
+---
+import Header from '../components/Header.astro';
+import ContactForm from '../components/Contact.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Nouvoulook - Nous contacter"
+  description="Contactez l'association Nouvoulook à Marcq-en-Baroeul pour toute question, don, bénévolat ou information sur la boutique solidaire."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/contact"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': "Contactez l'association Nouvoulook à Marcq-en-Baroeul pour toute question, don, bénévolat ou information sur la boutique solidaire.",
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <ContactForm />
+</Layout>

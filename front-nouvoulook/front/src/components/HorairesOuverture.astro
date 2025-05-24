@@ -1,0 +1,27 @@
+---
+export interface Props {
+  titre?: string
+  icone?: string
+  texte?: string
+}
+
+const { titre = "Nos horaires d'ouverture", icone = "⏰", texte } = Astro.props;
+
+// Convertir les retours à la ligne en <br>
+const texteAvecBr = texte ? texte.replace(/\n/g, '<br>') : '';
+---
+
+<div class="mb-4 fade-in">
+  <h3 class="dons-section-title d-flex align-items-center">
+    <span class="dons-icone" aria-hidden="true">{icone}</span>
+    {titre}
+  </h3>
+  <p class="dons-text-content" set:html={texteAvecBr}></p>
+</div>
+
+<style>
+  .dons-text-content {
+    white-space: pre-line;
+    line-height: 1.6;
+  }
+</style> 

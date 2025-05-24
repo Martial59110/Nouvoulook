@@ -1,0 +1,269 @@
+---
+import '../style/dons.css';
+
+const response = await fetch(`${import.meta.env.API_URL}/history`);
+const data = await response.json();
+const history = {
+  imageUrl: data[0]?.imageUrl || '',
+  textContent: data[0]?.textContent || '',
+  textContent2: data[0]?.textContent2 || '',
+  textContent3: data[0]?.textContent3 || '',
+  image1: data[0]?.image1 || '',
+  image2: data[0]?.image2 || '',
+  image3: data[0]?.image3 || ''
+};
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+
+---
+
+<section class="history-timeline-section py-5">
+  <div class="container position-relative">
+    <!-- Timeline verticale -->
+    <div class="history-timeline-line d-none d-lg-block"></div>
+    <!-- Bloc 1 : gauche, rose (image à droite) -->
+    <div class="row history-timeline-row mb-5 fade-in-scroll align-items-center">
+      <div class="col-lg-7 col-md-9 offset-lg-0 offset-md-1 animate__animated animate__fadeInLeft position-relative">
+        <div class="history-timeline-dot history-timeline-dot-rose d-none d-lg-block">
+          <i class="bi bi-book-half"></i>
+        </div>
+        <div class="history-block left-block p-4 history-block-rose">
+          <div class="history-text history-text-rose">
+            <span class="history-title-nouvoulook">{history.textContent.split('\n')[0]}</span>
+            <div set:html={history.textContent.replace(history.textContent.split('\n')[0], '')} />
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 d-none d-lg-flex justify-content-start">
+        <img src={history.image1?.startsWith('/assets') ? `${apiUrl}${history.image1}` : history.image1} alt="Illustration 1" class="history-timeline-img" />
+      </div>
+    </div>
+    <!-- Bloc 2 : droite, orange (image à gauche) -->
+    <div class="row history-timeline-row mb-5 fade-in-scroll align-items-center justify-content-end">
+      <div class="col-lg-2 d-none d-lg-flex justify-content-end">
+        <img src={history.image2?.startsWith('/assets') ? `${apiUrl}${history.image2}` : history.image2} alt="Illustration 2" class="history-timeline-img" />
+      </div>
+      <div class="col-lg-7 col-md-9 animate__animated animate__fadeInRight position-relative">
+        <div class="history-timeline-dot history-timeline-dot-orange d-none d-lg-block">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="history-block right-block p-4 history-block-orange">
+          <div class="history-text history-text-orange">
+            <span class="history-title-nouvoulook">{history.textContent2.split('\n')[0]}</span>
+            <div set:html={history.textContent2.replace(history.textContent2.split('\n')[0], '')} />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bloc 3 : gauche, jaune (image à droite) -->
+    <div class="row history-timeline-row fade-in-scroll align-items-center">
+      <div class="col-lg-7 col-md-9 offset-lg-0 offset-md-1 animate__animated animate__fadeInLeft position-relative">
+        <div class="history-timeline-dot history-timeline-dot-jaune d-none d-lg-block">
+          <i class="bi bi-star-fill"></i>
+        </div>
+        <div class="history-block left-block p-4 history-block-jaune">
+          <div class="history-text history-text-jaune">
+            <span class="history-title-nouvoulook">{history.textContent3.split('\n')[0]}</span>
+            <div set:html={history.textContent3.replace(history.textContent3.split('\n')[0], '')} />
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 d-none d-lg-flex justify-content-start">
+        <img src={history.image3?.startsWith('/assets') ? `${apiUrl}${history.image3}` : history.image3} alt="Illustration 3" class="history-timeline-img" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .history-timeline-section {
+    background: #ffffff;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    position: relative;
+  }
+  .history-timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, #E23E57 0%, #FC4811 50%, #E09C2B 100%);
+    border-radius: 3px;
+    opacity: 0.13;
+    z-index: 0;
+    transform: translateX(-50%);
+  }
+  .history-timeline-row {
+    position: relative;
+    min-height: 120px;
+  }
+  .history-timeline-dot {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 12px 0 rgba(233,30,99,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    z-index: 2;
+    border: 4px solid #E23E57;
+  }
+  .history-timeline-dot-rose {
+    border-color: #E23E57;
+    color: #E23E57;
+  }
+  .history-timeline-dot-orange {
+    border-color: #FC4811;
+    color: #FC4811;
+  }
+  .history-timeline-dot-jaune {
+    border-color: #E09C2B;
+    color: #E09C2B;
+  }
+  .history-block {
+    background: rgba(255,255,255,0.97);
+    border-radius: 1.2rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 12px 0 rgba(233,30,99,0.04);
+    transition: box-shadow 0.3s;
+    border-left: 5px solid #E91E63;
+    position: relative;
+    z-index: 1;
+  }
+  .history-block:hover {
+    box-shadow: 0 8px 32px 0 #e87c3d20, 0 2px 8px #0001;
+  }
+  .left-block {
+    border-left-width: 5px;
+    border-right: none;
+  }
+  .right-block {
+    border-right-width: 5px;
+    border-left: none;
+  }
+  .history-block-rose {
+    border-color: #E23E57;
+  }
+  .history-block-orange {
+    border-color: #FC4811;
+  }
+  .history-block-jaune {
+    border-color: #E09C2B;
+  }
+  .right-block.history-block-orange {
+    border-right: 5px solid #FC4811;
+    border-left: none;
+  }
+  .history-text {
+    font-size: 1.13rem;
+    line-height: 1.8;
+    color: #3a3a3a;
+    padding: 0.2rem 0.1rem;
+  }
+  .history-title-nouvoulook {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .history-text-rose .history-title-nouvoulook {
+    color: #E23E57;
+  }
+  .history-text-orange .history-title-nouvoulook {
+    color: #FC4811;
+  }
+  .history-text-jaune .history-title-nouvoulook {
+    color: #E09C2B;
+  }
+  .history-text h2, .history-text h3 {
+    color: #D52151;
+    margin-bottom: 1rem;
+  }
+  .history-text p {
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 1200px) {
+    .history-timeline-dot {
+      left: 102%;
+    }
+  }
+  @media (max-width: 900px) {
+    .left-block, .right-block {
+      border-left-width: 4px;
+      border-right-width: 4px;
+    }
+    .history-block {
+      border-radius: 0.8rem;
+      padding: 1.2rem;
+    }
+    .history-timeline-dot {
+      width: 40px;
+      height: 40px;
+      font-size: 1.3rem;
+      left: 102%;
+    }
+  }
+  @media (max-width: 600px) {
+    .history-block {
+      border-radius: 0.5rem;
+      padding: 0.8rem;
+    }
+    .history-timeline-section {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+    .history-timeline-dot {
+      display: none !important;
+    }
+    .history-timeline-line {
+      display: none !important;
+    }
+  }
+  .fade-in-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .history-timeline-img {
+    width: 430px;
+    height: 330px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px 0 rgba(233,30,99,0.10);
+    border: 3px solid #fff;
+    background: #f7f8fa;
+    margin: 0 0.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 1.5rem;
+  }
+  .history-timeline-img:hover {
+    transform: scale(1.07) rotate(-2deg);
+    box-shadow: 0 8px 32px 0 #e87c3d20, 0 2px 8px #0001;
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const els = document.querySelectorAll('.fade-in-scroll');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    els.forEach(el => observer.observe(el));
+  });
+</script>

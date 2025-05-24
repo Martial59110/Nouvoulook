@@ -1,0 +1,58 @@
+---
+import Header from '../components/Header.astro';
+import History from '../components/History.astro';
+import Timeline from '../components/Timeline.astro';
+import Layout from '../layouts/Layout.astro';
+import HistoryText from '../components/HistoryText.astro';
+---
+
+<Layout 
+  title="Nouvoulook - Notre histoire"
+  description="Découvrez l'histoire de l'association Nouvoulook, son engagement solidaire et son évolution à Marcq-en-Baroeul."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/historique"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': "Découvrez l'histoire de l'association Nouvoulook, son engagement solidaire et son évolution à Marcq-en-Baroeul.",
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <History />
+  <Timeline />
+  <HistoryText />
+</Layout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('don-img');
+    if (img) {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+     
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+    }
+
+    const els = document.querySelectorAll('.fade-in-scroll');
+    const observer = new window.IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    els.forEach(el => observer.observe(el));
+  });
+</script>

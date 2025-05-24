@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+
+// Récupération dynamique des infos de contact
+const res = await fetch(`${import.meta.env.API_URL}/contact-info`);
+const contact = await res.json();
+
+// Générer dynamiquement l'URL Google Maps à partir de l'adresse
+const encodedAddress = encodeURIComponent(contact.address || '');
+const mapUrl = `https://www.google.com/maps?q=${encodedAddress}&output=embed`;
+---
+
+<Layout 
+  title="Nouvoulook - Où nous trouver ?"
+  description="Où trouver la boutique solidaire Nouvoulook à Marcq-en-Baroeul ? Adresse, horaires, plan d'accès et contact."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/ou-nous-trouver"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': "Où trouver la boutique solidaire Nouvoulook à Marcq-en-Baroeul ? Adresse, horaires, plan d'accès et contact.",
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <main class="container py-5">
+    <div class="row align-items-center justify-content-center g-5">
+      <div class="col-lg-5 mb-4 mb-lg-0">
+        <h1 class="fw-bold mb-4" style="color:#e23e57;">Où nous trouver ?</h1>
+        <p class="fs-5 mb-3">Boutique Nouvoulook<br>
+            {contact.address}<br>
+          <span style="color:#fc4811;">France</span><br>
+          <span class="mt-2 d-block"><i class="bi bi-telephone-fill me-2" style="color:#e23e57;"></i><a href={`tel:${contact.phone?.replace(/\s/g, '')}`} style="color:#e23e57; text-decoration:none;">{contact.phone}</a></span>
+          <span class="mt-2 d-block"><i class="bi bi-envelope-fill me-2" style="color:#e23e57;"></i><a href={`mailto:${contact.publicEmail}`} style="color:#e23e57; text-decoration:none;">{contact.publicEmail}</a></span>
+        </p>
+        <div class="mb-2">
+          <span class="fw-bold">Horaires :</span><br>
+          {contact.openingHours}
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="ratio ratio-4x3 rounded shadow" style="min-height:300px;">
+          <iframe
+            src={mapUrl}
+            width="100%" height="100%" style="border:0; border-radius:1rem;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout> 

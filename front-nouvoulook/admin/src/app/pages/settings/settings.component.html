@@ -1,0 +1,69 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Paramètres</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Mot de passe actuel</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="currentPassword"
+                autocomplete="current-password"
+                required
+              >
+              <mat-error *ngIf="passwordForm.get('currentPassword')?.errors?.['required']">
+                Le mot de passe actuel est requis
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Nouveau mot de passe</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="newPassword"
+                autocomplete="new-password"
+                required
+              >
+              <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['required']">
+                Le nouveau mot de passe est requis
+              </mat-error>
+              <mat-error *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">
+                Le mot de passe doit contenir au moins 8 caractères
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Confirmer le nouveau mot de passe</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="confirmPassword"
+              >
+              <mat-error *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">
+                La confirmation du mot de passe est requise
+              </mat-error>
+              <mat-error *ngIf="passwordForm.errors?.['mismatch']">
+                Les mots de passe ne correspondent pas
+              </mat-error>
+            </mat-form-field>
+
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="passwordForm.invalid || loading"
+            >
+              {{ loading ? 'Modification en cours...' : 'Modifier le mot de passe' }}
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div> 

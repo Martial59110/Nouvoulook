@@ -1,0 +1,802 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import '../style/benevolat.css';
+
+const response = await fetch(`${import.meta.env.API_URL}/boutique`);
+const data = await response.json();
+
+
+const boutique = {
+ 
+  textContent: data[0]?.textContent || '',
+  imageUrl: data[0]?.imageUrl || '',
+  image1: data[0]?.image1 || '',
+  image2: data[0]?.image2 || '',
+  image3: data[0]?.image3 || '',
+  image4: data[0]?.image4 || '',
+  image5: data[0]?.image5 || '',
+  image6: data[0]?.image6 || '',
+  image7: data[0]?.image7 || '',
+  image8: data[0]?.image8 || '',
+  image9: data[0]?.image9 || '',
+  image10: data[0]?.image10 || '',
+  image11: data[0]?.image11 || '',
+  image12: data[0]?.image12 || '',
+  image13: data[0]?.image13 || '',
+  image14: data[0]?.image14 || '',
+  flyerPdfUrl: data[0]?.flyerPdfUrl || ''
+};
+
+
+const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+---
+
+<Layout 
+  title="Nouvoulook - La boutique"
+  description="Rejoignez l'association Nouvoulook comme bénévole à Marcq-en-Baroeul. Découvrez comment vous engager et participer à notre projet solidaire."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/benevolat"
+>
+  <Header />
+  <script type="application/ld+json" is:inline>{JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Nouvoulook',
+    'url': 'https://nouvoulook.fr/',
+    'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
+    'description': "Rejoignez l'association Nouvoulook comme bénévole à Marcq-en-Baroeul. Découvrez comment vous engager et participer à notre projet solidaire.",
+    'address': {
+      '@type': 'PostalAddress',
+      'addressLocality': 'Marcq-en-Baroeul',
+      'addressCountry': 'FR'
+    }
+  })}</script>
+  <main class="container-fluid py-5 dons-main-with-wave position-relative p-5">
+    <div class="dons-bg-wave">
+      <svg viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path fill="#cfff7a" fill-opacity="1" d="M0,160 C360,2040 1080,80 1440,160 L1440,0 L0,0 Z"></path>
+      </svg>
+    </div>
+    <div class="row justify-content-center align-items-center gy-4 mb-4 position-relative dons-hero-row">
+      <div class="col-md-6 position-relative">
+        <div class="dons-yellow-box green-box dons-overlap p-4">
+          <h1 class="mb-0 benevolat-purple-title concept-green-title">Notre boutique</h2>
+        </div>
+      </div>
+      <div class="col-md-6 text-center position-relative">
+        {boutique.imageUrl && (
+          <img
+            src={boutique.imageUrl.startsWith('/assets') ? `${apiUrl}${boutique.imageUrl}` : boutique.imageUrl}
+            alt="Notre boutique"
+            class="img-fluid rounded dons-img-real mx-auto mb-2"
+            id="boutique-img"
+          />
+        )}
+      </div>
+    </div>
+   
+    <!-- Présentation de la boutique -->
+    <section class="concept-section concept-section-green">
+      <div class="concept-section-inner">
+        <h2 class="concept-title concept-title-green"><span class="concept-title-ico">🤝</span>Notre boutique : un lieu solidaire, vivant et ouvert</h2>
+        <p class="lead concept-lead">Un espace pour tous, sans distinction <span class="concept-badge concept-badge-green">Ouvert à tous</span></p>
+        <p>
+          Chez Nouvoulook, tout le monde a sa place. Pas de guichet réservé, pas de regard différent selon votre situation. Ici, vous êtes un client, un acteur, un membre d'une communauté.<br>
+          C'est cette égalité de traitement, ce non-jugement fondamental, qui fait la force et la singularité de notre boutique.
+        </p>
+      </div>
+    </section>
+    {(boutique.image1 || boutique.image2) && (
+      <div class="concept-img-banner-row">
+        {boutique.image1 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image1.startsWith('/assets') ? `${apiUrl}${boutique.image1}` : boutique.image1} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image2 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image2.startsWith('/assets') ? `${apiUrl}${boutique.image2}` : boutique.image2} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+    <section class="concept-section concept-section-yellow">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-yellow"><span class="concept-title-ico">💡</span> Acheter autrement : donner du sens à ses achats</h3>
+        <p>
+          En achetant chez Nouvoulook, vous participez à un modèle qui allie écologie, solidarité et inclusion. Les vêtements sont soigneusement triés, rangés par taille et genre, toujours dans le respect des personnes.<br>
+          Ce n'est pas un dépôt-vente, c'est un lieu où l'objet reprend vie avec dignité.
+        </p>
+      </div>
+    </section>
+    {(boutique.image3 || boutique.image4) && (
+      <div class="concept-img-banner-row">
+        {boutique.image3 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image3.startsWith('/assets') ? `${apiUrl}${boutique.image3}` : boutique.image3} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image4 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image4.startsWith('/assets') ? `${apiUrl}${boutique.image4}` : boutique.image4} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+    <section class="concept-section concept-section-pink">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-pink"><span class="concept-title-ico">♻️</span> Une économie circulaire et humaine</h3>
+        <p>
+          Chaque objet qui entre chez Nouvoulook suit un cycle vertueux : il est récupéré, restauré, réévalué, puis remis en circulation à prix solidaire.<br>
+          Ce système permet d'éviter le gaspillage, de limiter les déchets et de proposer des produits de qualité, accessibles à tous.
+        </p>
+      </div>
+    </section>
+    {(boutique.image5 || boutique.image6) && (
+      <div class="concept-img-banner-row">
+        {boutique.image5 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image5.startsWith('/assets') ? `${apiUrl}${boutique.image5}` : boutique.image5} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image6 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image6.startsWith('/assets') ? `${apiUrl}${boutique.image6}` : boutique.image6} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+    <section class="concept-section concept-section-white">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">🌱</span> Une boutique vivante, qui s'adapte et innove</h3>
+        <ul class="concept-list">
+          <li>Des défilés et mises en avant stylistiques.</li>
+          <li>Des ateliers couture pour apprendre ou transmettre.</li>
+          <li>Des journées bien-être pour prendre soin de soi.</li>
+          <li>Des événements éphémères et collaboratifs avec le quartier.</li>
+        </ul>
+        <p>Notre boutique n'est pas figée : elle vit avec les gens qui la font vivre.</p>
+      </div>
+    </section>
+    {(boutique.image7 || boutique.image8) && (
+      <div class="concept-img-banner-row">
+        {boutique.image7 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image7.startsWith('/assets') ? `${apiUrl}${boutique.image7}` : boutique.image7} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image8 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image8.startsWith('/assets') ? `${apiUrl}${boutique.image8}` : boutique.image8} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+    <section class="concept-section concept-section-white">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">🫂</span> Des bénévoles engagés et formés</h3>
+        <p>
+          Chez Nouvoulook, le bénévolat n'est pas réservé à quelques profils : tout le monde peut s'y impliquer.<br>
+          Chaque bénévole est formé à nos valeurs (respect, accueil, dignité), et peut évoluer selon ses envies : aide en boutique, tri, accueil, animation, etc.<br>
+          Beaucoup d'entre eux témoignent d'une reprise de confiance et d'une vraie fierté de contribuer à un projet utile et humain.
+        </p>
+      </div>
+    </section>
+    {(boutique.image9 || boutique.image10) && (
+      <div class="concept-img-banner-row">
+        {boutique.image9 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image9.startsWith('/assets') ? `${apiUrl}${boutique.image9}` : boutique.image9} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image10 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image10.startsWith('/assets') ? `${apiUrl}${boutique.image10}` : boutique.image10} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+    <section class="concept-section concept-section-white">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">🤲</span> Une organisation participative</h3>
+        <p>Nous croyons à la force du collectif : les usagers, bénévoles et clients sont invités chaque année à des réunions participatives pour faire évoluer la boutique.<br>
+        La parole est libre, les idées sont prises en compte, car le lieu appartient à tous.</p>
+      </div>
+    </section>
+    {(boutique.image11 || boutique.image12) && (
+      <div class="concept-img-banner-row">
+        {boutique.image11 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image11.startsWith('/assets') ? `${apiUrl}${boutique.image11}` : boutique.image11} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image12 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image12.startsWith('/assets') ? `${apiUrl}${boutique.image12}` : boutique.image12} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+    <section class="concept-section concept-section-white">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">⭐</span> Nos engagements quotidiens</h3>
+        <ul class="concept-list">
+          <li>Respect de la dignité : chacun est accueilli comme une personne, pas comme un "bénéficiaire".</li>
+          <li>Valorisation des talents : les bénévoles et clients sont reconnus pour leurs compétences.</li>
+          <li>Accessibilité : vêtements triés par genre, taille, saison ; boutique claire et rangée ; horaires adaptés.</li>
+          <li>Transparence et équité : chaque produit a un prix clair, chaque remise est justifiée.</li>
+        </ul>
+      </div>
+    </section>
+    {(boutique.image13 || boutique.image14) && (
+      <div class="concept-img-banner-row">
+        {boutique.image13 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image13.startsWith('/assets') ? `${apiUrl}${boutique.image13}` : boutique.image13} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+        {boutique.image14 && (
+          <div class="concept-img-banner-wrapper">
+            <img src={boutique.image14.startsWith('/assets') ? `${apiUrl}${boutique.image14}` : boutique.image14} alt="Notre boutique" class="concept-img-banner" />
+          </div>
+        )}
+      </div>
+    )}
+    <div class="concept-separator"></div>
+
+    <!-- Section téléchargement fiche d'adhésion -->
+    <section class="concept-section concept-section-green">
+      <div class="concept-section-inner">
+        <h3 class="concept-title concept-title-green">
+          <span class="concept-title-ico">📝</span>
+          Devenir client de notre boutique
+        </h3>
+        <p class="mb-4">
+          Pour devenir client de notre boutique solidaire, téléchargez et remplissez notre fiche d'adhésion.
+          C'est simple, rapide et gratuit !
+        </p>
+        <div class="text-center">
+          {boutique.flyerPdfUrl ? (
+            <a
+              href={boutique.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${boutique.flyerPdfUrl}` : boutique.flyerPdfUrl}
+              class="btn btn-lg animate__animated animate__fadeInUp"
+              style="background:#a4da47; border-color:#a4da47; color:#005009; font-weight:600;"
+              download
+            >
+              <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
+            </a>
+          ) : (
+            <a href="/assets/fiche-adhesion.pdf" class="btn btn-lg animate__animated animate__fadeInUp" 
+               style="background:#a4da47; border-color:#a4da47; color:#005009; font-weight:600;" 
+               download>
+              <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Réduction Marcquoise -->
+    <section class="reduc-section">
+      <div class="reduc-inner">
+        <h2 class="reduc-title"><span class="reduc-ico">🎁</span>Réduction réservée aux Marcquois</h2>
+        <p class="reduc-desc">Pour les habitants de Marcq-en-Baroeul, une réduction spéciale est appliquée sur présentation d'une attestation CAF. Cette réduction permet à chacun d'accéder à des produits de qualité à prix encore plus solidaire.</p>
+      </div>
+    </section>
+
+    <!-- Valeurs sous forme d'icônes -->
+    <section class="valeurs-section">
+      <div class="valeurs-inner">
+        <h2 class="valeurs-title"><span class="valeurs-ico">💚</span>Nos valeurs</h2>
+        <div class="valeurs-row">
+          <div class="valeur-card valeur-mixite">
+            <div class="valeur-icone"><span>🤝</span></div>
+            <div class="valeur-titre">Développement de la mixité sociale</div>
+          </div>
+          <div class="valeur-card valeur-dignite">
+            <div class="valeur-icone"><span>🫂</span></div>
+            <div class="valeur-titre">Respect de la dignité</div>
+          </div>
+          <div class="valeur-card valeur-difference">
+            <div class="valeur-icone"><span>🌈</span></div>
+            <div class="valeur-titre">Respect de la différence</div>
+          </div>
+          <div class="valeur-card valeur-durable">
+            <div class="valeur-icone"><span>♻️</span></div>
+            <div class="valeur-titre">Développement durable</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section téléchargement fiche d'adhésion -->
+    <section class="container py-5 fade-in-scroll">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
+            <div class="text-center mb-4">
+              <i class="bi bi-file-earmark-person-fill fs-1 mb-3" style="color:#a4da47;"></i>
+              <h3 class="fw-bold" style="color:#a4da47;">Fiche d'adhésion client</h3>
+              <p class="mb-4">Téléchargez notre fiche d'adhésion pour devenir client de notre boutique solidaire</p>
+              {boutique.flyerPdfUrl ? (
+                <a
+                  href={boutique.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${boutique.flyerPdfUrl}` : boutique.flyerPdfUrl}
+                  class="btn btn-primary btn-lg animate__animated animate__fadeInUp"
+                  style="background:#a4da47; border-color:#a4da47;"
+                  download
+                >
+                  <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
+                </a>
+              ) : (
+                <a href="/assets/fiche-adhesion.pdf" class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#a4da47; border-color:#a4da47;" download>
+                  <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('boutique-img'); // Cible l'image principale de la boutique
+    if (img) {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+     
+      // Au cas où l'image serait déjà chargée (cache)
+      if (img.complete) {
+        img.classList.add('loaded');
+      }
+    }
+
+    // Si tu as d'autres éléments avec .fade-in-scroll sur cette page, tu peux garder/adapter cette partie :
+    // const els = document.querySelectorAll('.fade-in-scroll');
+    // const observer = new window.IntersectionObserver((entries) => {
+    //   entries.forEach(entry => {
+    //     if (entry.isIntersecting) {
+    //       entry.target.classList.add('visible');
+    //       observer.unobserve(entry.target);
+    //     }
+    //   });
+    // }, { threshold: 0.2 });
+    // els.forEach(el => observer.observe(el));
+  });
+</script>
+
+<style>
+body, .concept-bg {
+  background: #f8faf7 !important;
+}
+.concept-bg {
+  padding-bottom: 2rem;
+}
+.concept-section {
+  margin: 0 auto 2.5rem auto;
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px #0001;
+  max-width: 1100px;
+  padding: 0;
+  background: #fff;
+  position: relative;
+}
+.concept-section-green {
+  background: linear-gradient(90deg, #e8ffe0 0%, #f8faf7 100%);
+}
+.concept-section-yellow {
+  background: linear-gradient(90deg, #fffbe0 0%, #f8faf7 100%);
+}
+.concept-section-pink {
+  background: linear-gradient(90deg, #ffe0f0 0%, #f8faf7 100%);
+}
+.concept-section-white {
+  background: #fff;
+}
+.concept-section-inner {
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+}
+.concept-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  line-height: 1.1;
+}
+.concept-title-ico {
+  font-size: 2.2rem;
+  vertical-align: middle;
+}
+.concept-title-green {
+  color: #005009;
+  background: linear-gradient(90deg, #cfff7a33 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-yellow {
+  color: #a4da47;
+  background: linear-gradient(90deg, #fffbe0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-pink {
+  color: #d52151;
+  background: linear-gradient(90deg, #ffe0f0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-lead {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+}
+.concept-badge {
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 1.2rem;
+  padding: 0.2em 1em;
+  margin-left: 1em;
+  vertical-align: middle;
+}
+.concept-badge-green {
+  background: #cfff7a;
+  color: #005009;
+}
+.concept-list {
+  margin: 1.2rem 0 1.2rem 1.2rem;
+  padding-left: 1.2rem;
+  font-size: 1.1rem;
+}
+.concept-separator {
+  width: 100%;
+  height: 32px;
+  background: linear-gradient(90deg, #e8ffe0 0%, #fffbe0 50%, #ffe0f0 100%);
+  opacity: 0.25;
+  margin: 0 auto 2.5rem auto;
+  border-radius: 2rem;
+  max-width: 900px;
+}
+.concept-img-float-left, .concept-img-float-right, .concept-img-animated {
+  float: none;
+  display: block;
+  margin: 1.5rem 2.2rem 1.5rem 0;
+  width: 340px;
+  max-width: 95vw;
+  height: auto;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px #0002;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
+}
+.concept-img-float-right {
+  margin: 1.5rem 0 1.5rem 2.2rem;
+}
+.concept-img-animated:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 8px 32px #a4da4740;
+}
+@media (max-width: 900px) {
+  .concept-section-inner {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+  }
+  .concept-title {
+    font-size: 1.3rem;
+    padding: 0.1em 0.3em;
+  }
+  .concept-img-float-left, .concept-img-float-right, .concept-img-animated {
+    float: none;
+    display: block;
+    margin: 1.2rem auto;
+    width: 95vw;
+    max-width: 95vw;
+    height: auto;
+  }
+}
+.concept-green-title {
+  color: #005009 !important;
+
+}
+.green-box {
+  background-color: #a4da47;
+}
+.concept-img-float {
+  max-width: 220px;
+  width: 100%;
+  min-width: 120px;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px #0002;
+  margin: 0 2rem 1rem 0;
+  float: left;
+  shape-outside: border-box;
+}
+.img-float-right.concept-img-float {
+  float: right;
+  margin: 0 0 1rem 2rem;
+}
+@media (max-width: 900px) {
+  .concept-img-float, .img-float-right.concept-img-float {
+    float: none;
+    display: block;
+    margin: 1.5rem auto;
+    width: 98vw;
+    max-width: 98vw;
+    min-width: 0;
+  }
+}
+.concept-img-center-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0 2.5rem 0;
+}
+.concept-img-center {
+  max-width: 420px;
+  width: 100%;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px #0002;
+}
+.concept-feature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 32px #0001;
+  margin: 2.5rem 0;
+  padding: 2.2rem 2rem;
+  gap: 2.5rem;
+}
+.concept-feature-left {
+  flex-direction: row;
+}
+.concept-feature-right {
+  flex-direction: row-reverse;
+}
+.concept-feature-center {
+  flex-direction: column;
+}
+.concept-feature-img-wrapper {
+  flex: 0 0 320px;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.concept-feature-img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px #0002;
+  object-fit: cover;
+}
+.concept-feature-img-center {
+  margin-bottom: 1.5rem;
+}
+.concept-feature-img-large {
+  max-width: 420px;
+}
+.concept-feature-text {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.concept-feature-text-center {
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .concept-feature {
+    flex-direction: column !important;
+    padding: 1.2rem 0.5rem;
+    gap: 1.2rem;
+  }
+  .concept-feature-img-wrapper {
+    max-width: 98vw;
+    width: 100%;
+  }
+  .concept-feature-img, .concept-feature-img-large {
+    max-width: 98vw;
+    width: 100%;
+  }
+  .concept-feature-text, .concept-feature-text-center {
+    text-align: left;
+    width: 100%;
+  }
+}
+.concept-img-float-left {
+  float: left;
+  width: 180px;
+  max-width: 40vw;
+  margin: 0 1.5rem 1rem 0;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px #0001;
+}
+.concept-img-float-right {
+  float: right;
+  width: 180px;
+  max-width: 40vw;
+  margin: 0 0 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px #0001;
+}
+@media (max-width: 900px) {
+  .concept-img-float-left, .concept-img-float-right {
+    float: none;
+    display: block;
+    margin: 1.2rem auto;
+    width: 98vw;
+    max-width: 98vw;
+  }
+}
+.concept-img-banner-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2.5rem;
+  margin: 2.5rem 0 2.5rem 0;
+  flex-wrap: wrap;
+}
+.concept-img-banner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+.concept-img-banner {
+  width: 100%;
+  max-width: 520px;
+  max-height: 320px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px #0002;
+  background: #fff;
+  padding: 0.7rem;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
+}
+.concept-img-banner:hover {
+  transform: scale(1.025) rotate(-1deg);
+  box-shadow: 0 16px 48px #a4da4740;
+}
+.concept-img-caption {
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+@media (max-width: 1100px) {
+  .concept-img-banner-row {
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 900px) {
+  .concept-img-banner-row {
+    flex-direction: column;
+    gap: 1.2rem;
+    margin: 1.2rem 0 1.2rem 0;
+  }
+}
+.reduc-section {
+  background: linear-gradient(90deg, #e8ffe0 0%, #f8faf7 100%);
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px #a4da4740;
+  max-width: 900px;
+  margin: 3.5rem auto 2.5rem auto;
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+  display: flex;
+  justify-content: center;
+}
+.reduc-inner {
+  width: 100%;
+}
+.reduc-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #a4da47;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+.reduc-ico {
+  font-size: 2.2rem;
+  vertical-align: middle;
+}
+.reduc-desc {
+  font-size: 1.18rem;
+  color: #222;
+  margin-bottom: 0;
+}
+.valeurs-section {
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px #0001;
+  max-width: 1100px;
+  margin: 3.5rem auto 1rem auto;
+  padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+}
+.valeurs-inner {
+  width: 100%;
+}
+.valeurs-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #005009;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 2.2rem;
+}
+.valeurs-ico {
+  font-size: 2.2rem;
+  vertical-align: middle;
+}
+.valeurs-row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+.valeur-card {
+  background: linear-gradient(135deg, #f8faf7 60%, #e8ffe0 100%);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px #a4da4740;
+  padding: 2.2rem 1.2rem 1.2rem 1.2rem;
+  min-width: 180px;
+  max-width: 220px;
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.valeur-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px #a4da4740;
+}
+.valeur-icone {
+  background: #cfff7a;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px #a4da4740;
+  transition: background 0.2s;
+}
+.valeur-card:hover .valeur-icone {
+  background: #a4da47;
+}
+.valeur-titre {
+  color: #005009;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .reduc-section, .valeurs-section {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+  }
+  .valeurs-row {
+    gap: 1.2rem;
+  }
+}
+</style>
+
