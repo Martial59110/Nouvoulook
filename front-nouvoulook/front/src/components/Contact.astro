@@ -1,7 +1,19 @@
 ---
 const imageBoutiquePath = "/assets/boutique.png";
 import '../style/contact.css';
-const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+
+// Récupération dynamique des infos de contact
+let contact = null;
+try {
+  const res = await fetch('http://ts-api-nouvoulook:3001/contact-info');
+  contact = await res.json();
+} catch (error) {
+  console.error('Erreur lors de la récupération des informations de contact:', error);
+}
+
+// Valeurs par défaut si l'API n'est pas disponible
+const email = contact?.publicEmail ;
+const phone = contact?.phone;
 ---
   
 <div class="container py-5">
@@ -20,80 +32,28 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
-        <h3 class="mb-4 text-center fw-bold" style="color:#e23e57;">Veuillez remplir le formulaire ci-dessous :</h3>
-        <form id="contact-form">
-          <div class="row g-3 mb-3">
-            <div class="col-md-6">
-              <label for="nom" class="form-label">Nom</label>
-              <input type="text" class="form-control" id="nom" name="nom" required>
-            </div>
-            <div class="col-md-6">
-              <label for="prenom" class="form-label">Prénom</label>
-              <input type="text" class="form-control" id="prenom" name="prenom" required>
-            </div>
-          </div>
-          <div class="row g-3 mb-3">
-            <div class="col-md-6">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="col-md-6">
-              <label for="telephone" class="form-label">Téléphone <i><small>(optionnel)</small></i></label>
-              <input type="tel" class="form-control" id="telephone" name="telephone">
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="message" class="form-label">Votre message</label>
-            <textarea class="form-control" id="message" name="message" rows="8" required></textarea>
-          </div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">Envoyer</button>
-          </div>
-        </form>
+
+        <div class="text-center">
+          <h4 class="mb-3" style="color:#e23e57;">Contactez-nous au :</h4>
+          <p class="mb-3">
+            <i class="bi bi-envelope-fill me-2" style="color:#e23e57;"></i>
+            <a href={`mailto:${email}`} style="color:#e23e57; text-decoration:none; font-weight:500;">{email}</a>
+          </p>
+          <p class="mb-4">
+            <i class="bi bi-telephone-fill me-2" style="color:#e23e57;"></i>
+            <a href={`tel:${phone?.replace(/\s/g, '')}`} style="color:#e23e57; text-decoration:none; font-weight:500;">{phone}</a>
+          </p>
+          <p class="mb-4">Ou utilisez simplement le bouton ci-dessous :</p>
+          <a href={`mailto:${email}?subject=Contact Nouvoulook&body=Bonjour,%0D%0A%0D%0AJe souhaite vous contacter concernant :%0D%0A%0D%0A%0D%0A%0D%0ACordialement,%0D%0A[Votre nom]`} class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">
+            <i class="fas fa-envelope me-2"></i>Envoyer un email
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<script define:vars={{ apiUrl }}>
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('contact-form');
-    if (!form) return;
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = Object.fromEntries(new FormData(form));
-      const submitButton = form.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      
-      try {
-        submitButton.disabled = true;
-        submitButton.textContent = 'Envoi en cours...';
-        
-        const res = await fetch(`${apiUrl}/contact-form`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            type: 'contact',
-            sujet: 'Nouveau message de contact'
-          })
-        });
-        
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Erreur lors de l\'envoi');
-        
-        alert('Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
-        form.reset();
-      } catch (err) {
-        alert('Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.');
-        console.error('Erreur:', err);
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-      }
-    });
-  });
-</script>
+
 
 <style>
   .contact-yellow-box {

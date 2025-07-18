@@ -4,11 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
-function isSafeInput(str: string): boolean {
-  // Pas d'espaces, pas de guillemets, pas de point-virgule, pas de chevrons, pas de SQL classique
-  return !(/[\s'";<>]/.test(str));
-}
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -27,7 +22,10 @@ export class LoginComponent {
   resetEmail = '';
   resetMessage = '';
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(
+    private auth: AuthService, 
+    private router: Router
+  ) {
     this.resetFields();
   }
 
@@ -41,11 +39,14 @@ export class LoginComponent {
   isFormValid(): boolean {
     // Email regex simple
     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email);
+    
+    // Validation mot de passe basique
+    const passwordValid = this.password.length >= 8;
+    
     return (
       emailValid &&
-      this.password.length > 0 &&
-      isSafeInput(this.email) &&
-      isSafeInput(this.password)
+      passwordValid &&
+      this.password.length > 0
     );
   }
 
@@ -56,6 +57,7 @@ export class LoginComponent {
       this.password = '';
       return;
     }
+    
     this.auth.login(this.email, this.password).subscribe({
       next: (res) => {
         if (!res.user) {
@@ -65,7 +67,7 @@ export class LoginComponent {
         this.auth.setTokens(res.access_token, res.refresh_token, this.rememberMe, res.user);
         this.router.navigate(['/admin']);
       },
-      error: () => {
+      error: (error) => {
         this.error = 'Identifiants incorrects';
         this.password = '';
       }

@@ -12,6 +12,18 @@ const textVolunteer = {
   flyerPdfUrl: data[0]?.flyerPdfUrl || ''
 };
 
+// Récupération des informations de contact
+let contact = null;
+try {
+  const contactResponse = await fetch(`${import.meta.env.API_URL}/contact-info`);
+  contact = await contactResponse.json();
+} catch (error) {
+  console.error('Erreur lors de la récupération des informations de contact:', error);
+}
+
+const email = contact?.publicEmail || 'floquet.martial@gmail.com';
+const phone = contact?.phone || '03 20 00 00 00';
+
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
 let successMessage = "";
 let errorMessage = "";
@@ -139,41 +151,69 @@ let errorMessage = "";
         <div class="col-lg-8">
           <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
             <h3 class="mb-4 text-center fw-bold" style="color:#e23e57;">Envie de nous rejoindre&nbsp;?</h3>
-            <form id="contact-form">
-              <div class="row g-3 mb-3">
+            <div class="text-center">
+              <p class="mb-4">Pour postuler comme bénévole, envoyez-nous un email avec les informations suivantes :</p>
+              
+              <div class="row g-4 mb-4">
                 <div class="col-md-6">
-                  <label for="nom" class="form-label">Nom</label>
-                  <input type="text" class="form-control" id="nom" name="nom" required>
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h5 class="card-title" style="color:#e23e57;">
+                        <i class="bi bi-person-fill me-2"></i>Informations personnelles
+                      </h5>
+                      <ul class="list-unstyled">
+                        <li>• Nom et prénom</li>
+                        <li>• Email</li>
+                        <li>• Téléphone</li>
+                        <li>• Âge (optionnel)</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-md-6">
-                  <label for="prenom" class="form-label">Prénom</label>
-                  <input type="text" class="form-control" id="prenom" name="prenom" required>
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h5 class="card-title" style="color:#e23e57;">
+                        <i class="bi bi-calendar-check me-2"></i>Disponibilités
+                      </h5>
+                      <ul class="list-unstyled">
+                        <li>• Jours de la semaine  (optionnel)</li>
+                        <li>• Horaires préférés (optionnel)</li>
+                        <li>• Fréquence souhaitée (optionnel)</li>
+                        <li>• Durée d'engagement (optionnel)</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" required>
+              
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h5 class="card-title" style="color:#e23e57;">
+                    <i class="bi bi-chat-heart me-2"></i>Votre motivation
+                  </h5>
+                  <p class="card-text">Expliquez-nous pourquoi vous souhaitez rejoindre Nouvoulook et quelles sont vos motivations pour le bénévolat.</p>
                 </div>
-                <div class="col-md-6">
-                  <label for="telephone" class="form-label">Téléphone</label>
-                  <input type="tel" class="form-control" id="telephone" name="telephone">
+              </div>
+              
+              <div class="card mb-4">
+                <div class="card-body text-center">
+                  <h5 class="card-title mb-3" style="color:#e23e57;">Contactez-nous au :</h5>
+                  <p class="mb-2">
+                    <i class="bi bi-envelope-fill me-2" style="color:#e23e57;"></i>
+                    <a href={`mailto:${email}`} style="color:#e23e57; text-decoration:none; font-weight:500;">{email}</a>
+                  </p>
+                  <p class="mb-0">
+                    <i class="bi bi-telephone-fill me-2" style="color:#e23e57;"></i>
+                    <a href={`tel:${phone?.replace(/\s/g, '')}`} style="color:#e23e57; text-decoration:none; font-weight:500;">{phone}</a>
+                  </p>
                 </div>
               </div>
-              <div class="mb-3">
-                <label for="disponibilites" class="form-label">Disponibilités</label>
-                <textarea class="form-control" id="disponibilites" name="disponibilites" rows="2" required></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="motivation" class="form-label">Votre motivation</label>
-                <textarea class="form-control" id="motivation" name="motivation" rows="3" required></textarea>
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">Envoyer ma candidature</button>
-              </div>
-              <div id="success-message" class="alert alert-success mt-3" style="display:none"></div>
-              <div id="error-message" class="alert alert-danger mt-3" style="display:none"></div>
-            </form>
+              
+              <a href={`mailto:${email}?subject=Candidature Bénévole Nouvoulook&body=Bonjour,%0D%0A%0D%0AJe souhaite postuler comme bénévole chez Nouvoulook.%0D%0A%0D%0A--- INFORMATIONS PERSONNELLES ---%0D%0ANom :%0D%0APrénom :%0D%0AEmail :%0D%0ATéléphone :%0D%0AÂge :%0D%0A%0D%0A--- DISPONIBILITÉS ---%0D%0AJours de la semaine :%0D%0AHoraires préférés :%0D%0AFréquence souhaitée :%0D%0ADurée d'engagement :%0D%0A%0D%0A--- MOTIVATION ---%0D%0A%0D%0A%0D%0A%0D%0ACordialement,%0D%0A[Votre nom]`} class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">
+                    <i class="bi bi-envelope me-2"></i>Envoyer ma candidature
+                  </a>
+            </div>
           </div>
         </div>
       </div>
@@ -181,9 +221,9 @@ let errorMessage = "";
   </main>
 </Layout>
 
-<script define:vars={{ apiUrl }}>
+<script>
   document.addEventListener('DOMContentLoaded', () => {
-    const img = document.getElementById('don-img');
+    const img = document.getElementById('don-img') as HTMLImageElement;
     if (img) {
       img.addEventListener('load', () => {
         img.classList.add('loaded');
@@ -204,50 +244,8 @@ let errorMessage = "";
       });
     }, { threshold: 0.2 });
     els.forEach(el => observer.observe(el));
-
-    const form = document.getElementById('contact-form');
-    if (!form) return;
-    const successDiv = document.getElementById('success-message');
-    const errorDiv = document.getElementById('error-message');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = Object.fromEntries(new FormData(form));
-      const submitButton = form.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      try {
-        submitButton.disabled = true;
-        submitButton.textContent = 'Envoi en cours...';
-        const res = await fetch(`${apiUrl}/contact-form`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            type: 'benevolat',
-            sujet: 'Nouvelle candidature bénévole'
-          })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          form.reset();
-          successDiv.textContent = "Merci pour votre message ! Nous vous répondrons dès que possible.";
-          successDiv.style.display = "block";
-          errorDiv.style.display = "none";
-        } else {
-          const errorData = await res.json();
-          errorDiv.textContent = errorData.message || "Une erreur s'est produite lors de l'envoi du formulaire. Veuillez réessayer.";
-          errorDiv.style.display = "block";
-          successDiv.style.display = "none";
-        }
-      } catch (error) {
-        errorDiv.textContent = "Une erreur s'est produite. Vérifiez votre connexion ou réessayez plus tard.";
-        errorDiv.style.display = "block";
-        successDiv.style.display = "none";
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-      }
-    });
   });
+</script>
 </script>
 
 <style>

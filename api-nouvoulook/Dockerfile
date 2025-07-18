@@ -52,6 +52,9 @@ COPY --from=builder /app/public ./public
 # Copy Prisma schema and migrations (for runtime migrations, if needed)
 COPY --from=builder /app/prisma ./prisma
 
+# Change ownership of all files to appuser
+RUN chown -R appuser:appgroup /app
+
 # Set environment variables
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"
@@ -64,3 +67,4 @@ EXPOSE 3001
 
 # Start the application with Prisma migrations et seed
 CMD npx prisma migrate deploy && npx prisma db seed && npm run start:prod
+

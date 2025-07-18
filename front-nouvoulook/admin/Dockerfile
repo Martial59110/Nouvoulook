@@ -39,4 +39,4 @@ USER appuser
 
 EXPOSE 8080
 
-CMD ["http-server", "dist/admin/browser", "-p", "8080", "-c-1"]
+CMD ["http-server", "dist/admin/browser", "-p", "8080", "-c-1", "-P", "http://localhost:8080?/"]
