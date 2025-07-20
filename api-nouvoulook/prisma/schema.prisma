@@ -127,6 +127,14 @@ model Picto {
   // Ajoute d'autres champs si besoin (ex: nom, date, etc.)
 }
 
+model PdfDocument {
+  id        Int      @id @default(autoincrement())
+  name      String   // Nom affiché dans l'admin
+  url       String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model ContactInfo {
   id          String   @id @default(uuid())
   smtpUser    String   // Identifiant SMTP (utilisé pour Nodemailer)
@@ -142,23 +150,32 @@ model ContactInfo {
 model History {
   id            String         @id @default(uuid())
   imageUrl      String?
-  image1        String?
-  image2        String?
-  image3        String?
-  textContent   String?
-  textContent2  String?
-  textContent3  String?
+  sections      HistorySection[]
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
-  
 
   @@map("history")
+}
+
+model HistorySection {
+  id          String   @id @default(uuid())
+  order       Int      // Pour l'ordre d'affichage
+  imageUrl    String?  @map("image_url")
+  textContent String?  @map("text_content")
+  historyId   String   @map("history_id")
+  history     History  @relation(fields: [historyId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("history_sections")
 }
 
 model TimelineItem {
   id          String   @id @default(uuid())
   year        String
   description String
+  icon        String   @default("bi-star-fill")
+  color       String   @default("#E23E57")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -168,23 +185,27 @@ model TimelineItem {
 model Boutique {
   id        String   @id @default(uuid())
   imageUrl  String   @map("image_url")
-  image1    String?
-  image2    String?
-  image3    String?
-  image4    String?
-  image5    String?
-  image6    String?
-  image7    String?
-  image8    String?
-  image9    String?
-  image10   String?
-  image11   String?
-  image12   String?
-  image13   String?
-  image14   String?
+  sections  BoutiqueSection[]
   flyerPdfUrl String? @map("flyer_pdf_url")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("boutique")
+}
+
+model BoutiqueSection {
+  id          String   @id @default(uuid())
+  title       String
+  content     String   @db.Text
+  icon        String?
+  color       String   @default("green") // green, yellow, pink, white
+  image1      String?
+  image2      String?
+  order       Int      @default(0)
+  boutiqueId  String   @map("boutique_id")
+  boutique    Boutique @relation(fields: [boutiqueId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("boutique_sections")
 }

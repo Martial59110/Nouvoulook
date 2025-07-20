@@ -14,12 +14,15 @@ const texteAvecBr = texte.replace(/\n/g, '<br>');
     <span class="dons-icone" aria-hidden="true">{icone}</span>
     {titre}
   </h3>
-  <p class="dons-text-content" set:html={texteAvecBr}></p>
+  <span class="dons-text-content" set:html={texteAvecBr}></span>
 </div>
 
 <style>
   .dons-text-content {
     white-space: pre-line;
     line-height: 1.6;
+  }
+  p {
+    margin-bottom: 0 !important;
   }
 </style> 

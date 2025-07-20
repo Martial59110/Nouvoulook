@@ -12,6 +12,18 @@ const textVolunteer = {
   flyerPdfUrl: data[0]?.flyerPdfUrl || ''
 };
 
+// Récupérer les informations du PDF si il existe
+let pdfInfo = null;
+if (textVolunteer.flyerPdfUrl) {
+  try {
+    const pdfResponse = await fetch(`${import.meta.env.API_URL}/pdf-documents`);
+    const pdfs = await pdfResponse.json();
+    pdfInfo = pdfs.find((pdf: any) => pdf.url === textVolunteer.flyerPdfUrl);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations PDF:', error);
+  }
+}
+
 // Récupération des informations de contact
 let contact = null;
 try {
@@ -137,7 +149,7 @@ let errorMessage = "";
                   style="background:#e23e57; border-color:#e23e57;"
                   download
                 >
-                  <i class="bi bi-download me-2"></i>Télécharger la charte
+                  <i class="bi bi-download me-2"></i>{pdfInfo ? `Télécharger ${pdfInfo.name}` : 'Télécharger la charte'}
                 </a>
               )}
             </div>
@@ -165,7 +177,6 @@ let errorMessage = "";
                         <li>• Nom et prénom</li>
                         <li>• Email</li>
                         <li>• Téléphone</li>
-                        <li>• Âge (optionnel)</li>
                       </ul>
                     </div>
                   </div>
@@ -207,13 +218,13 @@ let errorMessage = "";
                     <i class="bi bi-telephone-fill me-2" style="color:#e23e57;"></i>
                     <a href={`tel:${phone?.replace(/\s/g, '')}`} style="color:#e23e57; text-decoration:none; font-weight:500;">{phone}</a>
                   </p>
-                </div>
+              </div>
               </div>
               
-              <a href={`mailto:${email}?subject=Candidature Bénévole Nouvoulook&body=Bonjour,%0D%0A%0D%0AJe souhaite postuler comme bénévole chez Nouvoulook.%0D%0A%0D%0A--- INFORMATIONS PERSONNELLES ---%0D%0ANom :%0D%0APrénom :%0D%0AEmail :%0D%0ATéléphone :%0D%0AÂge :%0D%0A%0D%0A--- DISPONIBILITÉS ---%0D%0AJours de la semaine :%0D%0AHoraires préférés :%0D%0AFréquence souhaitée :%0D%0ADurée d'engagement :%0D%0A%0D%0A--- MOTIVATION ---%0D%0A%0D%0A%0D%0A%0D%0ACordialement,%0D%0A[Votre nom]`} class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">
+              <a href={`mailto:${email}?subject=Candidature Bénévole Nouvoulook&body=Bonjour,%0D%0A%0D%0AJe souhaite postuler comme bénévole chez Nouvoulook.%0D%0A%0D%0A--- INFORMATIONS PERSONNELLES ---%0D%0ANom :%0D%0APrénom :%0D%0AEmail :%0D%0ATéléphone :%0D%0A%0D%0A--- DISPONIBILITÉS ---%0D%0AJours de la semaine :%0D%0AHoraires préférés :%0D%0AFréquence souhaitée :%0D%0ADurée d'engagement :%0D%0A%0D%0A--- MOTIVATION ---%0D%0A%0D%0A%0D%0A%0D%0ACordialement,%0D%0A[Votre nom]`} class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#e23e57; border-color:#e23e57;">
                     <i class="bi bi-envelope me-2"></i>Envoyer ma candidature
                   </a>
-            </div>
+              </div>
           </div>
         </div>
       </div>

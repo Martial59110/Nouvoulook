@@ -26,10 +26,13 @@ RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 # Installer curl pour le debug réseau
 RUN apt-get update -y && apt-get install -y curl
 
-# Copy built app and production dependencies only
+# Copy built app and package files
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
+COPY --from=builder /app/package-lock.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production
 
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"

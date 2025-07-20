@@ -22,6 +22,7 @@ import { ContactInfoModule } from './contact-info/contact-info.module';
 import { HistoryModule } from './history/history.module';
 import { TimelineItemModule } from './timeline-item/timeline-item.module';
 import { BoutiqueModule } from './boutique/boutique.module';
+import { PdfDocumentsModule } from './pdf-documents/pdf-documents.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { BoutiqueModule } from './boutique/boutique.module';
     HistoryModule,
     TimelineItemModule,
     BoutiqueModule,
+    PdfDocumentsModule,
   ],
   controllers: [AppController],
   providers: [

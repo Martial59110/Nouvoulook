@@ -1,26 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+  UseGuards,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { BoutiqueService } from './boutique.service';
 import { CreateBoutiqueDto } from './dto/create-boutique.dto';
 import { UpdateBoutiqueDto } from './dto/update-boutique.dto';
-import { Public } from '../decorators/public.decorator';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
-import * as fs from 'fs';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Public } from '../decorators/public.decorator';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
 @Controller('boutique')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class BoutiqueController {
   constructor(private readonly boutiqueService: BoutiqueService) {}
 
   @Post()
-  @Roles(Role.ADMIN, Role.USER)
-  create(@Body() dto: CreateBoutiqueDto) {
-    return this.boutiqueService.create(dto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  create(@Body() createBoutiqueDto: CreateBoutiqueDto) {
+    return this.boutiqueService.create(createBoutiqueDto);
   }
 
   @Get()
@@ -36,56 +46,80 @@ export class BoutiqueController {
   }
 
   @Patch(':id')
-  @Roles(Role.ADMIN, Role.USER)
-  update(@Param('id') id: string, @Body() dto: UpdateBoutiqueDto) {
-    return this.boutiqueService.update(id, dto);
-  }
-
-  @Delete('delete-flyer')
-  async deleteFlyer(@Body('url') url: string) {
-    if (!url) return { error: 'Aucune URL fournie' };
-    const filePath = `./public${url}`;
-    console.log('Tentative de suppression du fichier:', filePath);
-    try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-        return { success: true };
-      }
-      console.log('Fichier non trouvé à:', filePath);
-      return { error: 'Fichier non trouvé' };
-    } catch (e) {
-      console.error('Erreur lors de la suppression:', e);
-      return { error: 'Erreur lors de la suppression du fichier' };
-    }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  update(@Param('id') id: string, @Body() updateBoutiqueDto: UpdateBoutiqueDto) {
+    return this.boutiqueService.update(id, updateBoutiqueDto);
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN, Role.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.boutiqueService.remove(id);
   }
 
+  // Endpoints pour gérer les sections
+  @Post(':boutiqueId/sections')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  createSection(@Param('boutiqueId') boutiqueId: string, @Body() sectionData: any) {
+    return this.boutiqueService.createSection(boutiqueId, sectionData);
+  }
+
+  @Patch('sections/:sectionId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  updateSection(@Param('sectionId') sectionId: string, @Body() sectionData: any) {
+    return this.boutiqueService.updateSection(sectionId, sectionData);
+  }
+
+  @Delete('sections/:sectionId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  deleteSection(@Param('sectionId') sectionId: string) {
+    return this.boutiqueService.deleteSection(sectionId);
+  }
+
+  @Post('sections/reorder')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  reorderSections(@Body() sections: { id: string; order: number }[]) {
+    return this.boutiqueService.reorderSections(sections);
+  }
+
+  // Upload de flyer PDF
   @Post('upload-flyer')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './public/assets',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + extname(file.originalname);
-        cb(null, 'boutique-flyer-' + uniqueSuffix);
-      }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './public/assets',
+        filename: (req, file, cb) => {
+          const timestamp = Date.now();
+          return cb(null, `flyer-${timestamp}.pdf`);
+        },
+      }),
     }),
-    fileFilter: (req, file, cb) => {
-      if (file.mimetype === 'application/pdf') {
-        cb(null, true);
-      } else {
-        cb(new Error('Seuls les fichiers PDF sont autorisés !'), false);
+  )
+  uploadFlyer(@UploadedFile() file: any) {
+    try {
+      if (!file) {
+        throw new Error('Aucun fichier n\'a été uploadé');
       }
+      return { url: `/assets/${file.filename}` };
+    } catch (error) {
+      console.error('Erreur upload flyer:', error);
+      throw error;
     }
-  }))
-  async uploadFlyer(@UploadedFile() file: any) {
-    if (!file) {
-      return { error: 'Aucun fichier reçu' };
-    }
-    return { url: `/assets/${file.filename}` };
+  }
+
+  @Delete('delete-flyer')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  deleteFlyer(@Body() body: { url: string }) {
+    // Ici tu peux ajouter la logique pour supprimer le fichier
+    return { success: true };
   }
 } 

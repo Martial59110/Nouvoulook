@@ -5,12 +5,14 @@ import { PermissionsService } from '../../services/permissions.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PictosService } from '../../services/pictos.service';
+import { UploadHttpService } from '../../services/upload-http.service';
 import { environment } from '../../../environments/environment';
+import { RichTextEditorComponent } from '../../components/rich-text-editor/rich-text-editor.component';
 
 @Component({
   selector: 'app-news',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RichTextEditorComponent],
   template: `
     <ng-container *ngIf="permissionsLoaded">
       <ng-container *ngIf="hasAccess; else forbidden">
@@ -26,7 +28,10 @@ import { environment } from '../../../environments/environment';
             </div>
             <div class="mb-2">
               <label>Texte</label>
-              <textarea class="form-control" formControlName="textContent" rows="3" required></textarea>
+              <app-rich-text-editor
+                [value]="convertSpansToParagraphs(newsForm.get('textContent')?.value)"
+                (valueChange)="onTextContentChange($event)"
+              ></app-rich-text-editor>
             </div>
             <div class="mb-2">
               <label>Image (URL)</label>
@@ -129,7 +134,8 @@ export class NewsComponent implements OnInit, OnDestroy {
     private newsService: NewsService,
     private permissions: PermissionsService,
     private fb: FormBuilder,
-    private pictosService: PictosService
+    private pictosService: PictosService,
+    private uploadService: UploadHttpService
   ) {
     this.newsForm = this.fb.group({
       title: ['', Validators.required],
@@ -224,7 +230,7 @@ export class NewsComponent implements OnInit, OnDestroy {
   uploadPicto(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.pictosService.uploadPicto(file).subscribe(() => this.loadPictos());
+      this.uploadService.uploadPicto(file).then(() => this.loadPictos());
     }
   }
 
@@ -236,5 +242,70 @@ export class NewsComponent implements OnInit, OnDestroy {
     if (url.startsWith('http')) return url;
     if (url.startsWith('/')) return this.apiUrl + url;
     return this.apiUrl + '/' + url;
+  }
+  
+  onTextContentChange(value: string) {
+    const spanHtml = this.convertParagraphsToSpans(value);
+    this.newsForm.get('textContent')?.setValue(spanHtml);
+  }
+
+  convertParagraphsToSpans(html: string): string {
+    if (!html) return '';
+    
+    // Créer un élément temporaire pour manipuler le HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Remplacer les paragraphes par des spans avec sauts de ligne
+    const paragraphs = tempDiv.querySelectorAll('p');
+    
+    paragraphs.forEach((p, index) => {
+      const span = document.createElement('span');
+      span.innerHTML = p.innerHTML;
+      span.className = p.className;
+      span.style.cssText = p.style.cssText;
+      
+      // Ajouter un saut de ligne après chaque span (sauf le dernier)
+      if (index < paragraphs.length - 1) {
+        const br = document.createElement('br');
+        p.parentNode?.insertBefore(br, p.nextSibling);
+      }
+      
+      p.parentNode?.replaceChild(span, p);
+    });
+    
+    return tempDiv.innerHTML;
+  }
+
+  convertSpansToParagraphs(html: string): string {
+    if (!html) return '';
+    
+    // Créer un élément temporaire pour manipuler le HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Remplacer les spans par des paragraphes
+    const spans = tempDiv.querySelectorAll('span');
+    
+    spans.forEach((span) => {
+      const paragraph = document.createElement('p');
+      paragraph.innerHTML = span.innerHTML;
+      paragraph.className = span.className;
+      paragraph.style.cssText = span.style.cssText;
+      
+      // Remplacer le span par le paragraphe
+      span.parentNode?.replaceChild(paragraph, span);
+    });
+    
+    // Supprimer les <br> qui ne sont plus nécessaires
+    const breaks = tempDiv.querySelectorAll('br');
+    breaks.forEach(br => {
+      const nextElement = br.nextElementSibling;
+      if (nextElement && nextElement.tagName === 'P') {
+        br.remove();
+      }
+    });
+    
+    return tempDiv.innerHTML;
   }
 } 

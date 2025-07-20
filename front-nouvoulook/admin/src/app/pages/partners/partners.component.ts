@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { PermissionsService } from '../../services/permissions.service';
 import { PictosService } from '../../services/pictos.service';
+import { UploadHttpService } from '../../services/upload-http.service';
 import { environment } from '../../../environments/environment';
 
 export interface Partner {
@@ -178,7 +179,8 @@ export class PartnersComponent implements OnInit, OnDestroy {
   constructor(
     private permissionsService: PermissionsService,
     private http: HttpClient,
-    private pictosService: PictosService
+    private pictosService: PictosService,
+    private uploadService: UploadHttpService
   ) {}
 
   ngOnInit() {
@@ -306,10 +308,10 @@ export class PartnersComponent implements OnInit, OnDestroy {
   uploadPicto(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.pictosService.uploadPicto(file).subscribe(() => {
+      this.uploadService.uploadPicto(file).then(() => {
         this.loadPictos(); // Recharger pour voir la nouvelle image
         this.successMsg = "Image téléversée avec succès dans la bibliothèque.";
-      }, () => {
+      }).catch(() => {
         this.errorMsg = "Erreur lors du téléversement de l'image.";
       });
     }

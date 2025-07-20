@@ -6,37 +6,37 @@ import '../style/benevolat.css';
 const response = await fetch(`${import.meta.env.API_URL}/boutique`);
 const data = await response.json();
 
+console.log('Boutique data:', data);
 
-const boutique = {
- 
-  textContent: data[0]?.textContent || '',
-  imageUrl: data[0]?.imageUrl || '',
-  image1: data[0]?.image1 || '',
-  image2: data[0]?.image2 || '',
-  image3: data[0]?.image3 || '',
-  image4: data[0]?.image4 || '',
-  image5: data[0]?.image5 || '',
-  image6: data[0]?.image6 || '',
-  image7: data[0]?.image7 || '',
-  image8: data[0]?.image8 || '',
-  image9: data[0]?.image9 || '',
-  image10: data[0]?.image10 || '',
-  image11: data[0]?.image11 || '',
-  image12: data[0]?.image12 || '',
-  image13: data[0]?.image13 || '',
-  image14: data[0]?.image14 || '',
-  flyerPdfUrl: data[0]?.flyerPdfUrl || ''
+const boutique = data[0] || {
+  imageUrl: '/assets/concept1.png',
+  sections: [],
+  flyerPdfUrl: ''
 };
 
+console.log('Boutique processed:', boutique);
+console.log('Sections count:', boutique.sections?.length || 0);
 
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+
+// Récupérer les informations du PDF si il existe
+let pdfInfo = null;
+if (boutique.flyerPdfUrl) {
+  try {
+    const pdfResponse = await fetch(`${import.meta.env.API_URL}/pdf-documents`);
+    const pdfDocuments = await pdfResponse.json();
+    pdfInfo = pdfDocuments.find((pdf: any) => pdf.url === boutique.flyerPdfUrl);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations PDF:', error);
+  }
+}
 ---
 
 <Layout 
-  title="Nouvoulook - La boutique"
-  description="Rejoignez l'association Nouvoulook comme bénévole à Marcq-en-Baroeul. Découvrez comment vous engager et participer à notre projet solidaire."
+  title="Nouvoulook - Notre concept"
+  description="Découvrez le concept de Nouvoulook : une boutique solidaire qui allie écologie, solidarité et inclusion à Marcq-en-Baroeul."
   ogImage="/assets/logo-nouvoulook.png"
-  canonical="https://nouvoulook.fr/benevolat"
+  canonical="https://nouvoulook.fr/concept"
 >
   <Header />
   <script type="application/ld+json" is:inline>{JSON.stringify({
@@ -45,7 +45,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
     'name': 'Nouvoulook',
     'url': 'https://nouvoulook.fr/',
     'logo': 'https://nouvoulook.fr/assets/logo-nouvoulook.png',
-    'description': "Rejoignez l'association Nouvoulook comme bénévole à Marcq-en-Baroeul. Découvrez comment vous engager et participer à notre projet solidaire.",
+    'description': "Découvrez le concept de Nouvoulook : une boutique solidaire qui allie écologie, solidarité et inclusion à Marcq-en-Baroeul.",
     'address': {
       '@type': 'PostalAddress',
       'addressLocality': 'Marcq-en-Baroeul',
@@ -61,295 +61,158 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
     <div class="row justify-content-center align-items-center gy-4 mb-4 position-relative dons-hero-row">
       <div class="col-md-6 position-relative">
         <div class="dons-yellow-box green-box dons-overlap p-4">
-          <h1 class="mb-0 benevolat-purple-title concept-green-title">Notre boutique</h2>
+          <h1 class="mb-0 benevolat-purple-title concept-green-title">Notre concept</h2>
         </div>
       </div>
       <div class="col-md-6 text-center position-relative">
         {boutique.imageUrl && (
           <img
-            src={boutique.imageUrl.startsWith('/assets') ? `${apiUrl}${boutique.imageUrl}` : boutique.imageUrl}
-            alt="Notre boutique"
+            src={`${apiUrl}${boutique.imageUrl}`}
+            alt="Notre concept"
             class="img-fluid rounded dons-img-real mx-auto mb-2"
-            id="boutique-img"
+            id="concept-img"
           />
         )}
       </div>
     </div>
    
-    <!-- Présentation de la boutique -->
-    <section class="concept-section concept-section-green">
-      <div class="concept-section-inner">
-        <h2 class="concept-title concept-title-green"><span class="concept-title-ico">🤝</span>Notre boutique : un lieu solidaire, vivant et ouvert</h2>
-        <p class="lead concept-lead">Un espace pour tous, sans distinction <span class="concept-badge concept-badge-green">Ouvert à tous</span></p>
-        <p>
-          Chez Nouvoulook, tout le monde a sa place. Pas de guichet réservé, pas de regard différent selon votre situation. Ici, vous êtes un client, un acteur, un membre d'une communauté.<br>
-          C'est cette égalité de traitement, ce non-jugement fondamental, qui fait la force et la singularité de notre boutique.
-        </p>
-      </div>
-    </section>
-    {(boutique.image1 || boutique.image2) && (
-      <div class="concept-img-banner-row">
-        {boutique.image1 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image1.startsWith('/assets') ? `${apiUrl}${boutique.image1}` : boutique.image1} alt="Notre boutique" class="concept-img-banner" />
+    <!-- Sections dynamiques -->
+    {boutique.sections && boutique.sections.length > 0 ? (
+      <div>
+      
+        {boutique.sections.map((section: any, index: number) => (
+          <div>
+            <section class={`concept-section concept-section-${section.color}`}>
+              <div class="concept-section-inner">
+                <h2 class={`concept-title concept-title-${section.color}`}>
+                  <span class="concept-title-ico">{section.icon || '📝'}</span>
+                  {section.title}
+                </h2>
+                <div set:html={section.content} class="section-content"></div>
+              </div>
+            </section>
+            
+            {(section.image1 || section.image2) && (
+              <div class="concept-img-banner-row">
+                {section.image1 && (
+                  <div class="concept-img-banner-wrapper">
+                    <img src={`${apiUrl}${section.image1}`} alt="Notre concept" class="concept-img-banner" />
+                  </div>
+                )}
+                {section.image2 && (
+                  <div class="concept-img-banner-wrapper">
+                    <img src={`${apiUrl}${section.image2}`} alt="Notre concept" class="concept-img-banner" />
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {index < boutique.sections.length - 1 && <div class="concept-separator"></div>}
           </div>
-        )}
-        {boutique.image2 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image2.startsWith('/assets') ? `${apiUrl}${boutique.image2}` : boutique.image2} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
+        ))}
       </div>
+    ) : (
+      // Contenu par défaut si aucune section n'est configurée
+      <>
+        <section class="concept-section concept-section-green">
+          <div class="concept-section-inner">
+            <h2 class="concept-title concept-title-green"><span class="concept-title-ico">🤝</span>Notre boutique : un lieu solidaire, vivant et ouvert</h2>
+            <p class="lead concept-lead">Un espace pour tous, sans distinction <span class="concept-badge concept-badge-green">Ouvert à tous</span></p>
+            <p>
+              Chez Nouvoulook, tout le monde a sa place. Pas de guichet réservé, pas de regard différent selon votre situation. Ici, vous êtes un client, un acteur, un membre d'une communauté.<br>
+              C'est cette égalité de traitement, ce non-jugement fondamental, qui fait la force et la singularité de notre boutique.
+            </p>
+          </div>
+        </section>
+        <div class="concept-separator"></div>
+        <section class="concept-section concept-section-yellow">
+          <div class="concept-section-inner">
+            <h3 class="concept-title concept-title-yellow"><span class="concept-title-ico">💡</span> Acheter autrement : donner du sens à ses achats</h3>
+            <p>
+              En achetant chez Nouvoulook, vous participez à un modèle qui allie écologie, solidarité et inclusion. Les vêtements sont soigneusement triés, rangés par taille et genre, toujours dans le respect des personnes.<br>
+              Ce n'est pas un dépôt-vente, c'est un lieu où l'objet reprend vie avec dignité.
+            </p>
+          </div>
+        </section>
+      </>
     )}
-    <div class="concept-separator"></div>
-    <section class="concept-section concept-section-yellow">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-yellow"><span class="concept-title-ico">💡</span> Acheter autrement : donner du sens à ses achats</h3>
-        <p>
-          En achetant chez Nouvoulook, vous participez à un modèle qui allie écologie, solidarité et inclusion. Les vêtements sont soigneusement triés, rangés par taille et genre, toujours dans le respect des personnes.<br>
-          Ce n'est pas un dépôt-vente, c'est un lieu où l'objet reprend vie avec dignité.
-        </p>
-      </div>
-    </section>
-    {(boutique.image3 || boutique.image4) && (
-      <div class="concept-img-banner-row">
-        {boutique.image3 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image3.startsWith('/assets') ? `${apiUrl}${boutique.image3}` : boutique.image3} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-        {boutique.image4 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image4.startsWith('/assets') ? `${apiUrl}${boutique.image4}` : boutique.image4} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-      </div>
-    )}
-    <div class="concept-separator"></div>
-    <section class="concept-section concept-section-pink">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-pink"><span class="concept-title-ico">♻️</span> Une économie circulaire et humaine</h3>
-        <p>
-          Chaque objet qui entre chez Nouvoulook suit un cycle vertueux : il est récupéré, restauré, réévalué, puis remis en circulation à prix solidaire.<br>
-          Ce système permet d'éviter le gaspillage, de limiter les déchets et de proposer des produits de qualité, accessibles à tous.
-        </p>
-      </div>
-    </section>
-    {(boutique.image5 || boutique.image6) && (
-      <div class="concept-img-banner-row">
-        {boutique.image5 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image5.startsWith('/assets') ? `${apiUrl}${boutique.image5}` : boutique.image5} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-        {boutique.image6 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image6.startsWith('/assets') ? `${apiUrl}${boutique.image6}` : boutique.image6} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-      </div>
-    )}
-    <div class="concept-separator"></div>
-    <section class="concept-section concept-section-white">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">🌱</span> Une boutique vivante, qui s'adapte et innove</h3>
-        <ul class="concept-list">
-          <li>Des défilés et mises en avant stylistiques.</li>
-          <li>Des ateliers couture pour apprendre ou transmettre.</li>
-          <li>Des journées bien-être pour prendre soin de soi.</li>
-          <li>Des événements éphémères et collaboratifs avec le quartier.</li>
-        </ul>
-        <p>Notre boutique n'est pas figée : elle vit avec les gens qui la font vivre.</p>
-      </div>
-    </section>
-    {(boutique.image7 || boutique.image8) && (
-      <div class="concept-img-banner-row">
-        {boutique.image7 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image7.startsWith('/assets') ? `${apiUrl}${boutique.image7}` : boutique.image7} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-        {boutique.image8 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image8.startsWith('/assets') ? `${apiUrl}${boutique.image8}` : boutique.image8} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-      </div>
-    )}
-    <div class="concept-separator"></div>
-    <section class="concept-section concept-section-white">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">🫂</span> Des bénévoles engagés et formés</h3>
-        <p>
-          Chez Nouvoulook, le bénévolat n'est pas réservé à quelques profils : tout le monde peut s'y impliquer.<br>
-          Chaque bénévole est formé à nos valeurs (respect, accueil, dignité), et peut évoluer selon ses envies : aide en boutique, tri, accueil, animation, etc.<br>
-          Beaucoup d'entre eux témoignent d'une reprise de confiance et d'une vraie fierté de contribuer à un projet utile et humain.
-        </p>
-      </div>
-    </section>
-    {(boutique.image9 || boutique.image10) && (
-      <div class="concept-img-banner-row">
-        {boutique.image9 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image9.startsWith('/assets') ? `${apiUrl}${boutique.image9}` : boutique.image9} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-        {boutique.image10 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image10.startsWith('/assets') ? `${apiUrl}${boutique.image10}` : boutique.image10} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-      </div>
-    )}
-    <div class="concept-separator"></div>
-    <section class="concept-section concept-section-white">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">🤲</span> Une organisation participative</h3>
-        <p>Nous croyons à la force du collectif : les usagers, bénévoles et clients sont invités chaque année à des réunions participatives pour faire évoluer la boutique.<br>
-        La parole est libre, les idées sont prises en compte, car le lieu appartient à tous.</p>
-      </div>
-    </section>
-    {(boutique.image11 || boutique.image12) && (
-      <div class="concept-img-banner-row">
-        {boutique.image11 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image11.startsWith('/assets') ? `${apiUrl}${boutique.image11}` : boutique.image11} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-        {boutique.image12 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image12.startsWith('/assets') ? `${apiUrl}${boutique.image12}` : boutique.image12} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-      </div>
-    )}
-    <div class="concept-separator"></div>
-    <section class="concept-section concept-section-white">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-green"><span class="concept-title-ico">⭐</span> Nos engagements quotidiens</h3>
-        <ul class="concept-list">
-          <li>Respect de la dignité : chacun est accueilli comme une personne, pas comme un "bénéficiaire".</li>
-          <li>Valorisation des talents : les bénévoles et clients sont reconnus pour leurs compétences.</li>
-          <li>Accessibilité : vêtements triés par genre, taille, saison ; boutique claire et rangée ; horaires adaptés.</li>
-          <li>Transparence et équité : chaque produit a un prix clair, chaque remise est justifiée.</li>
-        </ul>
-      </div>
-    </section>
-    {(boutique.image13 || boutique.image14) && (
-      <div class="concept-img-banner-row">
-        {boutique.image13 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image13.startsWith('/assets') ? `${apiUrl}${boutique.image13}` : boutique.image13} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-        {boutique.image14 && (
-          <div class="concept-img-banner-wrapper">
-            <img src={boutique.image14.startsWith('/assets') ? `${apiUrl}${boutique.image14}` : boutique.image14} alt="Notre boutique" class="concept-img-banner" />
-          </div>
-        )}
-      </div>
-    )}
-    <div class="concept-separator"></div>
 
-    <!-- Section téléchargement fiche d'adhésion -->
-    <section class="concept-section concept-section-green">
-      <div class="concept-section-inner">
-        <h3 class="concept-title concept-title-green">
-          <span class="concept-title-ico">📝</span>
+
+
+    <!-- Contenu statique après les sections -->
+    <div class="reduc-section">
+      <div class="reduc-inner">
+        <h3 class="reduc-title">
+          <span class="reduc-ico">📝</span>
           Devenir client de notre boutique
         </h3>
-        <p class="mb-4">
-          Pour devenir client de notre boutique solidaire, téléchargez et remplissez notre fiche d'adhésion.
+        <p class="reduc-desc">
+          Pour devenir client de notre boutique solidaire, téléchargez et remplissez notre fiche d'adhésion. 
           C'est simple, rapide et gratuit !
         </p>
-        <div class="text-center">
-          {boutique.flyerPdfUrl ? (
-            <a
-              href={boutique.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${boutique.flyerPdfUrl}` : boutique.flyerPdfUrl}
-              class="btn btn-lg animate__animated animate__fadeInUp"
-              style="background:#a4da47; border-color:#a4da47; color:#005009; font-weight:600;"
-              download
-            >
-              <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
+        {boutique.flyerPdfUrl ? (
+          <div class="text-center mt-3">
+            <a href={`${apiUrl}${boutique.flyerPdfUrl}`} target="_blank" class="btn btn-success btn-lg">
+              <i class="bi bi-download me-2"></i>
+              {pdfInfo ? `Télécharger ${pdfInfo.name}` : 'Télécharger la fiche d\'adhésion'}
             </a>
-          ) : (
-            <a href="/assets/fiche-adhesion.pdf" class="btn btn-lg animate__animated animate__fadeInUp" 
-               style="background:#a4da47; border-color:#a4da47; color:#005009; font-weight:600;" 
-               download>
-              <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
-            </a>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div class="text-center mt-3">
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Aucun formulaire d'adhésion configuré. Veuillez uploader un PDF dans l'admin.
+            </div>
+          </div>
+        )}
       </div>
-    </section>
+    </div>
 
-    <!-- Réduction Marcquoise -->
-    <section class="reduc-section">
+    <div class="reduc-section">
       <div class="reduc-inner">
-        <h2 class="reduc-title"><span class="reduc-ico">🎁</span>Réduction réservée aux Marcquois</h2>
-        <p class="reduc-desc">Pour les habitants de Marcq-en-Baroeul, une réduction spéciale est appliquée sur présentation d'une attestation CAF. Cette réduction permet à chacun d'accéder à des produits de qualité à prix encore plus solidaire.</p>
+        <h3 class="reduc-title">
+          <span class="reduc-ico">🎁</span>
+          Réduction réservée aux Marcquois
+        </h3>
+        <p class="reduc-desc">
+          Pour les habitants de Marcq-en-Baroeul, une réduction spéciale est appliquée sur présentation d'une attestation CAF. 
+          Cette réduction permet à chacun d'accéder à des produits de qualité à prix encore plus solidaire.
+        </p>
       </div>
-    </section>
+    </div>
 
-    <!-- Valeurs sous forme d'icônes -->
-    <section class="valeurs-section">
+    <div class="valeurs-section">
       <div class="valeurs-inner">
-        <h2 class="valeurs-title"><span class="valeurs-ico">💚</span>Nos valeurs</h2>
+        <h3 class="valeurs-title">
+          <span class="valeurs-ico">💚</span>
+          Nos valeurs
+        </h3>
         <div class="valeurs-row">
-          <div class="valeur-card valeur-mixite">
-            <div class="valeur-icone"><span>🤝</span></div>
+          <div class="valeur-card">
+            <div class="valeur-icone">🤝</div>
             <div class="valeur-titre">Développement de la mixité sociale</div>
           </div>
-          <div class="valeur-card valeur-dignite">
-            <div class="valeur-icone"><span>🫂</span></div>
+          <div class="valeur-card">
+            <div class="valeur-icone">🤗</div>
             <div class="valeur-titre">Respect de la dignité</div>
           </div>
-          <div class="valeur-card valeur-difference">
-            <div class="valeur-icone"><span>🌈</span></div>
+          <div class="valeur-card">
+            <div class="valeur-icone">🌈</div>
             <div class="valeur-titre">Respect de la différence</div>
           </div>
-          <div class="valeur-card valeur-durable">
-            <div class="valeur-icone"><span>♻️</span></div>
+          <div class="valeur-card">
+            <div class="valeur-icone">♻️</div>
             <div class="valeur-titre">Développement durable</div>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Section téléchargement fiche d'adhésion -->
-    <section class="container py-5 fade-in-scroll">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card shadow-lg p-4 animate__animated animate__fadeInUp">
-            <div class="text-center mb-4">
-              <i class="bi bi-file-earmark-person-fill fs-1 mb-3" style="color:#a4da47;"></i>
-              <h3 class="fw-bold" style="color:#a4da47;">Fiche d'adhésion client</h3>
-              <p class="mb-4">Téléchargez notre fiche d'adhésion pour devenir client de notre boutique solidaire</p>
-              {boutique.flyerPdfUrl ? (
-                <a
-                  href={boutique.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${boutique.flyerPdfUrl}` : boutique.flyerPdfUrl}
-                  class="btn btn-primary btn-lg animate__animated animate__fadeInUp"
-                  style="background:#a4da47; border-color:#a4da47;"
-                  download
-                >
-                  <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
-                </a>
-              ) : (
-                <a href="/assets/fiche-adhesion.pdf" class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#a4da47; border-color:#a4da47;" download>
-                  <i class="bi bi-download me-2"></i>Télécharger la fiche d'adhésion
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
   </main>
 </Layout>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    const img = document.getElementById('boutique-img'); // Cible l'image principale de la boutique
+    const img = document.getElementById('concept-img'); // Cible l'image principale de la boutique
     if (img) {
       img.addEventListener('load', () => {
         img.classList.add('loaded');
@@ -400,8 +263,32 @@ body, .concept-bg {
 .concept-section-pink {
   background: linear-gradient(90deg, #ffe0f0 0%, #f8faf7 100%);
 }
+.concept-section-blue {
+  background: linear-gradient(90deg, #e0f0ff 0%, #f8faf7 100%);
+}
+.concept-section-purple {
+  background: linear-gradient(90deg, #f0e0ff 0%, #f8faf7 100%);
+}
+.concept-section-orange {
+  background: linear-gradient(90deg, #ffe8d0 0%, #f8faf7 100%);
+}
+.concept-section-red {
+  background: linear-gradient(90deg, #ffe0e0 0%, #f8faf7 100%);
+}
+.concept-section-teal {
+  background: linear-gradient(90deg, #e0f8f0 0%, #f8faf7 100%);
+}
+.concept-section-indigo {
+  background: linear-gradient(90deg, #e8e0ff 0%, #f8faf7 100%);
+}
+.concept-section-gray {
+  background: linear-gradient(90deg, #f0f0f0 0%, #f8faf7 100%);
+}
 .concept-section-white {
   background: #fff;
+}
+.concept-section-black {
+  background: linear-gradient(90deg, #e0e0e0 0%, #f8faf7 100%);
 }
 .concept-section-inner {
   padding: 2.5rem 2.2rem 2.2rem 2.2rem;
@@ -440,10 +327,83 @@ body, .concept-bg {
   padding: 0.2em 0.7em;
   display: inline-flex;
 }
+.concept-title-blue {
+  color: #1e40af;
+  background: linear-gradient(90deg, #e0f0ff 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-purple {
+  color: #7c3aed;
+  background: linear-gradient(90deg, #f0e0ff 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-orange {
+  color: #ea580c;
+  background: linear-gradient(90deg, #ffe8d0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-red {
+  color: #dc2626;
+  background: linear-gradient(90deg, #ffe0e0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-teal {
+  color: #0f766e;
+  background: linear-gradient(90deg, #e0f8f0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-indigo {
+  color: #3730a3;
+  background: linear-gradient(90deg, #e8e0ff 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-gray {
+  color: #374151;
+  background: linear-gradient(90deg, #f0f0f0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
+.concept-title-black {
+  color: #111827;
+  background: linear-gradient(90deg, #e0e0e0 0%, #fff 100%);
+  border-radius: 1.2rem;
+  padding: 0.2em 0.7em;
+  display: inline-flex;
+}
 .concept-lead {
   font-size: 1.25rem;
   color: #333;
   margin-bottom: 1.2rem;
+}
+
+.section-content {
+  line-height: 1.6;
+}
+
+.section-content p {
+  margin-bottom: 1rem;
+}
+
+.section-content ul, .section-content ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-content li {
+  margin-bottom: 0.5rem;
 }
 .concept-badge {
   display: inline-block;

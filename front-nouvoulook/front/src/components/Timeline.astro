@@ -16,6 +16,8 @@ interface TimelineItem {
     id: string;
     year: string;
     description: string;
+    icon: string;
+    color: string;
 }
 
 const responseTimelineItems = await fetch(`${import.meta.env.API_URL}/timeline-item`);
@@ -24,9 +26,9 @@ const timelineItems: TimelineItem[] = await responseTimelineItems.json();
 // Tri des items par année
 const sortedTimelineItems = timelineItems.sort((a, b) => parseInt(a.year) - parseInt(b.year));
 
-// Couleurs et icônes alternées
-const colors = ['#E23E57', '#FC4811', '#E09C2B'];
-const icons = ['bi-star-fill', 'bi-heart-fill', 'bi-people-fill', 'bi-lightbulb-fill', 'bi-award-fill'];
+// Couleurs et icônes par défaut (utilisées si non définies dans la base de données)
+const defaultColors = ['#E23E57', '#FC4811', '#E09C2B'];
+const defaultIcons = ['bi-star-fill', 'bi-heart-fill', 'bi-people-fill', 'bi-lightbulb-fill', 'bi-award-fill'];
 ---
 
 <div class="timeline-container-nouveau">
@@ -34,8 +36,8 @@ const icons = ['bi-star-fill', 'bi-heart-fill', 'bi-people-fill', 'bi-lightbulb-
     <div class="timeline-nouveau">
         {sortedTimelineItems.map((item, idx) => {
             const isEven = idx % 2 === 0;
-            const color = colors[idx % colors.length];
-            const icon = icons[idx % icons.length];
+            const color = item.color || defaultColors[idx % defaultColors.length];
+            const icon = item.icon || defaultIcons[idx % defaultIcons.length];
             return (
                 <div class={`timeline-item-nouveau ${isEven ? 'left' : 'right'} animate__animated ${isEven ? 'animate__fadeInLeft' : 'animate__fadeInRight'} fade-in-scroll`}>
                     <div class="timeline-badge-nouveau" style={`background:${color};`}>

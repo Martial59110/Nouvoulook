@@ -3,17 +3,14 @@ import '../style/dons.css';
 
 const response = await fetch(`${import.meta.env.API_URL}/history`);
 const data = await response.json();
-const history = {
-  imageUrl: data[0]?.imageUrl || '',
-  textContent: data[0]?.textContent || '',
-  textContent2: data[0]?.textContent2 || '',
-  textContent3: data[0]?.textContent3 || '',
-  image1: data[0]?.image1 || '',
-  image2: data[0]?.image2 || '',
-  image3: data[0]?.image3 || ''
-};
+const history = data[0] || {};
+const sections = history.sections || [];
 
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
+
+// Couleurs pour les sections
+const colors = ['#E23E57', '#FC4811', '#E09C2B', '#E23E57', '#FC4811', '#E09C2B'];
+const icons = ['bi-book-half', 'bi-people-fill', 'bi-star-fill', 'bi-lightbulb-fill', 'bi-award-fill', 'bi-heart-fill'];
 
 ---
 
@@ -21,57 +18,45 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
   <div class="container position-relative">
     <!-- Timeline verticale -->
     <div class="history-timeline-line d-none d-lg-block"></div>
-    <!-- Bloc 1 : gauche, rose (image à droite) -->
-    <div class="row history-timeline-row mb-5 fade-in-scroll align-items-center">
-      <div class="col-lg-7 col-md-9 offset-lg-0 offset-md-1 animate__animated animate__fadeInLeft position-relative">
-        <div class="history-timeline-dot history-timeline-dot-rose d-none d-lg-block">
-          <i class="bi bi-book-half"></i>
-        </div>
-        <div class="history-block left-block p-4 history-block-rose">
-          <div class="history-text history-text-rose">
-            <span class="history-title-nouvoulook">{history.textContent.split('\n')[0]}</span>
-            <div set:html={history.textContent.replace(history.textContent.split('\n')[0], '')} />
+    
+    {sections.map((section: any, index: number) => {
+      const isLeft = index % 2 === 0;
+      const color = colors[index % colors.length];
+      const icon = icons[index % icons.length];
+      
+      return (
+        <div class={`row history-timeline-row mb-5 fade-in-scroll align-items-center ${isLeft ? '' : 'justify-content-end'}`}>
+          {!isLeft && (
+            <div class="col-lg-2 d-none d-lg-flex justify-content-end">
+              <img 
+                src={section.imageUrl?.startsWith('/assets') ? `${apiUrl}${section.imageUrl}` : section.imageUrl} 
+                alt={`Section ${section.order}`} 
+                class="history-timeline-img" 
+              />
+            </div>
+          )}
+          <div class={`col-lg-7 col-md-9 ${isLeft ? 'offset-lg-0 offset-md-1' : ''} animate__animated ${isLeft ? 'animate__fadeInLeft' : 'animate__fadeInRight'} position-relative`}>
+            <div class={`history-timeline-dot d-none d-lg-block`} style={`border-color: ${color}; color: ${color};`}>
+              <i class={icon}></i>
+            </div>
+                          <div class={`history-block ${isLeft ? 'left-block' : 'right-block'} p-4`} style={`border-color: ${color};`}>
+                <div class="history-text" style={`color: ${color};`}>
+                  <div set:html={section.textContent || ''} />
+                </div>
+              </div>
           </div>
+          {isLeft && (
+            <div class="col-lg-2 d-none d-lg-flex justify-content-start">
+              <img 
+                src={section.imageUrl?.startsWith('/assets') ? `${apiUrl}${section.imageUrl}` : section.imageUrl} 
+                alt={`Section ${section.order}`} 
+                class="history-timeline-img" 
+              />
+            </div>
+          )}
         </div>
-      </div>
-      <div class="col-lg-2 d-none d-lg-flex justify-content-start">
-        <img src={history.image1?.startsWith('/assets') ? `${apiUrl}${history.image1}` : history.image1} alt="Illustration 1" class="history-timeline-img" />
-      </div>
-    </div>
-    <!-- Bloc 2 : droite, orange (image à gauche) -->
-    <div class="row history-timeline-row mb-5 fade-in-scroll align-items-center justify-content-end">
-      <div class="col-lg-2 d-none d-lg-flex justify-content-end">
-        <img src={history.image2?.startsWith('/assets') ? `${apiUrl}${history.image2}` : history.image2} alt="Illustration 2" class="history-timeline-img" />
-      </div>
-      <div class="col-lg-7 col-md-9 animate__animated animate__fadeInRight position-relative">
-        <div class="history-timeline-dot history-timeline-dot-orange d-none d-lg-block">
-          <i class="bi bi-people-fill"></i>
-        </div>
-        <div class="history-block right-block p-4 history-block-orange">
-          <div class="history-text history-text-orange">
-            <span class="history-title-nouvoulook">{history.textContent2.split('\n')[0]}</span>
-            <div set:html={history.textContent2.replace(history.textContent2.split('\n')[0], '')} />
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Bloc 3 : gauche, jaune (image à droite) -->
-    <div class="row history-timeline-row fade-in-scroll align-items-center">
-      <div class="col-lg-7 col-md-9 offset-lg-0 offset-md-1 animate__animated animate__fadeInLeft position-relative">
-        <div class="history-timeline-dot history-timeline-dot-jaune d-none d-lg-block">
-          <i class="bi bi-star-fill"></i>
-        </div>
-        <div class="history-block left-block p-4 history-block-jaune">
-          <div class="history-text history-text-jaune">
-            <span class="history-title-nouvoulook">{history.textContent3.split('\n')[0]}</span>
-            <div set:html={history.textContent3.replace(history.textContent3.split('\n')[0], '')} />
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-2 d-none d-lg-flex justify-content-start">
-        <img src={history.image3?.startsWith('/assets') ? `${apiUrl}${history.image3}` : history.image3} alt="Illustration 3" class="history-timeline-img" />
-      </div>
-    </div>
+      );
+    })}
   </div>
 </section>
 

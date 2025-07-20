@@ -1,72 +1,93 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBoutiqueDto } from './dto/create-boutique.dto';
 import { UpdateBoutiqueDto } from './dto/update-boutique.dto';
-import { Boutique } from './entities/boutique.entity';
-import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class BoutiqueService {
-  constructor(
-    private prisma: PrismaService,
-    private readonly logger: PinoLogger
-  ) {
-    logger.setContext('BoutiqueService');
+  constructor(private prisma: PrismaService) {}
+
+  async create(createBoutiqueDto: CreateBoutiqueDto) {
+    return this.prisma.boutique.create({
+      data: createBoutiqueDto,
+      include: {
+        sections: {
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
   }
 
-  async create(dto: CreateBoutiqueDto): Promise<Boutique> {
-    this.logger.info('Creating new boutique', { ...dto });
-    const boutique = await this.prisma.boutique.create({
+  async findAll() {
+    return this.prisma.boutique.findMany({
+      include: {
+        sections: {
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
+  }
+
+  async findOne(id: string) {
+    return this.prisma.boutique.findUnique({
+      where: { id },
+      include: {
+        sections: {
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
+  }
+
+  async update(id: string, updateBoutiqueDto: UpdateBoutiqueDto) {
+    return this.prisma.boutique.update({
+      where: { id },
+      data: updateBoutiqueDto,
+      include: {
+        sections: {
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
+  }
+
+  async remove(id: string) {
+    return this.prisma.boutique.delete({
+      where: { id }
+    });
+  }
+
+  // Méthodes pour gérer les sections
+  async createSection(boutiqueId: string, sectionData: any) {
+    return this.prisma.boutiqueSection.create({
       data: {
-        ...dto,
-        flyerPdfUrl: dto.flyerPdfUrl,
-      },
+        ...sectionData,
+        boutiqueId
+      }
     });
-    this.logger.info('Boutique created successfully', { id: boutique.id });
-    return boutique;
   }
 
-  async findAll(): Promise<Boutique[]> {
-    this.logger.info('Fetching all boutiques');
-    const boutiques = await this.prisma.boutique.findMany();
-    this.logger.info(`Found ${boutiques.length} boutiques`);
-    return boutiques;
+  async updateSection(sectionId: string, sectionData: any) {
+    return this.prisma.boutiqueSection.update({
+      where: { id: sectionId },
+      data: sectionData
+    });
   }
 
-  async findOne(id: string): Promise<Boutique> {
-    this.logger.info('Fetching boutique by id', { id });
-    const boutique = await this.prisma.boutique.findUnique({
-      where: { id },
+  async deleteSection(sectionId: string) {
+    return this.prisma.boutiqueSection.delete({
+      where: { id: sectionId }
     });
-    if (!boutique) {
-      this.logger.warn('Boutique not found', { id });
-      throw new NotFoundException(`Boutique with ID ${id} not found`);
-    }
-    this.logger.info('Boutique found successfully', { id });
-    return boutique;
   }
 
-  async update(id: string, dto: UpdateBoutiqueDto): Promise<Boutique> {
-    this.logger.info('Updating boutique', { id, ...dto });
-    await this.findOne(id);
-    const updated = await this.prisma.boutique.update({
-      where: { id },
-      data: {
-        ...dto,
-        flyerPdfUrl: dto.flyerPdfUrl,
-      },
-    });
-    this.logger.info('Boutique updated successfully', { id });
-    return updated;
-  }
-
-  async remove(id: string): Promise<Boutique> {
-    this.logger.info('Removing boutique', { id });
-    await this.findOne(id);
-    const deleted = await this.prisma.boutique.delete({
-      where: { id },
-    });
-    this.logger.info('Boutique deleted successfully', { id });
-    return deleted;
+  async reorderSections(sections: { id: string; order: number }[]) {
+    const updates = sections.map(section => 
+      this.prisma.boutiqueSection.update({
+        where: { id: section.id },
+        data: { order: section.order }
+      })
+    );
+    
+    return this.prisma.$transaction(updates);
   }
 } 

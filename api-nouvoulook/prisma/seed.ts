@@ -287,16 +287,34 @@ async function main() {
   });
 
 await prisma.history.deleteMany();
-await prisma.history.createMany({
+await prisma.historySection.deleteMany();
+
+const history = await prisma.history.create({
+  data: {
+    imageUrl: '/assets/histoire.jpg'
+  }
+});
+
+// Créer les sections d'histoire par défaut
+await prisma.historySection.createMany({
   data: [
     {
-      image1: '/assets/image1.jpg',
-      image2: '/assets/image2.jpg',
-      image3: '/assets/image3.jpg',
-      imageUrl: '/assets/histoire.jpg',
-      textContent: `En 2005, l'association Innovation & Développement lance le chantier d'insertion "Système D comme Déco" dans le quartier de la Briqueterie à Marcq-en-Barœul. Dix femmes y participent pour apprendre à rénover des meubles et aménager leur intérieur. Au-delà de l'aspect créatif, ce projet permet à certaines participantes de retrouver un emploi ou de s'engager dans une formation qualifiante. Cette initiative marque le début d'un projet plus ambitieux, impulsé par la ville de Marcq-en-Barœul : créer un lieu de vente solidaire pour prolonger la dynamique d'insertion et de lien social.`,
-      textContent2: `Le 7 avril 2009, la boutique solidaire Nouvoulook ouvre ses portes. Pensée comme un espace de partage et de rencontres, elle propose vêtements, services et produits accessibles aux plus démunis comme au grand public. Porteuse des valeurs d'inclusion et d'économie circulaire, Nouvoulook devient un pont entre les mondes : elle crée du lien entre les habitants, valorise les parcours d'insertion et redonne une seconde vie aux objets comme aux personnes.`,
-      textContent3: `En 2017, Nouvoulook rejoint le projet VISES, une initiative transfrontalière qui réunit 21 partenaires en France et en Belgique. L'objectif : évaluer l'impact social des entreprises solidaires. Pour l'équipe de Nouvoulook, cette démarche est naturelle. Évaluer, c'est progresser, ajuster et renforcer ce qui fonctionne. C'est aussi mettre en lumière le rôle essentiel de l'économie sociale dans la transformation positive des territoires.`,
+      historyId: history.id,
+      order: 1,
+      imageUrl: '/assets/image1.jpg',
+      textContent: `En 2005, l'association Innovation & Développement lance le chantier d'insertion "Système D comme Déco" dans le quartier de la Briqueterie à Marcq-en-Barœul. Dix femmes y participent pour apprendre à rénover des meubles et aménager leur intérieur. Au-delà de l'aspect créatif, ce projet permet à certaines participantes de retrouver un emploi ou de s'engager dans une formation qualifiante. Cette initiative marque le début d'un projet plus ambitieux, impulsé par la ville de Marcq-en-Barœul : créer un lieu de vente solidaire pour prolonger la dynamique d'insertion et de lien social.`
+    },
+    {
+      historyId: history.id,
+      order: 2,
+      imageUrl: '/assets/image2.jpg',
+      textContent: `Le 7 avril 2009, la boutique solidaire Nouvoulook ouvre ses portes. Pensée comme un espace de partage et de rencontres, elle propose vêtements, services et produits accessibles aux plus démunis comme au grand public. Porteuse des valeurs d'inclusion et d'économie circulaire, Nouvoulook devient un pont entre les mondes : elle crée du lien entre les habitants, valorise les parcours d'insertion et redonne une seconde vie aux objets comme aux personnes.`
+    },
+    {
+      historyId: history.id,
+      order: 3,
+      imageUrl: '/assets/image3.jpg',
+      textContent: `En 2017, Nouvoulook rejoint le projet VISES, une initiative transfrontalière qui réunit 21 partenaires en France et en Belgique. L'objectif : évaluer l'impact social des entreprises solidaires. Pour l'équipe de Nouvoulook, cette démarche est naturelle. Évaluer, c'est progresser, ajuster et renforcer ce qui fonctionne. C'est aussi mettre en lumière le rôle essentiel de l'économie sociale dans la transformation positive des territoires.`
     }
   ]
 });
@@ -304,44 +322,147 @@ await prisma.history.createMany({
 await prisma.timelineItem.deleteMany();
 await prisma.timelineItem.createMany({
   data: [
-    { year: '2005', description: "Lancement d'un projet de boutique solidaire" },
-    { year: '2009', description: "Création de la boutique Nouvoulook" },
-    { year: '2011', description: "La boutique développe d'autres activités" },
-    { year: '2017', description: "Dépôt de dossier en tant qu'entreprise testeuse auprès de partenaires européens" },
+    { 
+      year: '2005', 
+      description: "Lancement d'un projet de boutique solidaire",
+      icon: 'bi-star-fill',
+      color: '#E23E57'
+    },
+    { 
+      year: '2009', 
+      description: "Création de la boutique Nouvoulook",
+      icon: 'bi-heart-fill',
+      color: '#FC4811'
+    },
+    { 
+      year: '2011', 
+      description: "La boutique développe d'autres activités",
+      icon: 'bi-people-fill',
+      color: '#E09C2B'
+    },
+    { 
+      year: '2017', 
+      description: "Dépôt de dossier en tant qu'entreprise testeuse auprès de partenaires européens",
+      icon: 'bi-lightbulb-fill',
+      color: '#E23E57'
+    },
   ]
 });
 
-await prisma.partner.deleteMany();
-await prisma.partner.createMany({
-  data: [
-    { name: 'Marcq', imageUrl: '/assets/marcq-logo.png' },
-    { name: 'Cravate Solidaire', imageUrl: '/assets/cravate-solidaire.png' },
-    { name: 'Cofidis', imageUrl: '/assets/cofidis.png' }
-  ]
-});
+  await prisma.partner.deleteMany();
+  await prisma.partner.createMany({
+    data: [
+      { name: 'Marcq', imageUrl: '/assets/marcq-logo.png' },
+      { name: 'Cravate Solidaire', imageUrl: '/assets/cravate-solidaire.png' },
+      { name: 'Cofidis', imageUrl: '/assets/cofidis.png' }
+    ]
+  });
 
-// Seed de la boutique
+  // Seed des PDFs existants
+  await prisma.pdfDocument.deleteMany();
+  await prisma.pdfDocument.createMany({
+    data: [
+      {
+        name: 'Flyer de la boutique',
+        url: '/assets/flyer.pdf',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Charte des bénévoles',
+        url: '/assets/volunteer-flyer-1747927818508.pdf',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]
+  });
+
+// Seed de la boutique avec sections dynamiques
+await prisma.boutiqueSection.deleteMany();
 await prisma.boutique.deleteMany();
-await prisma.boutique.create({
+
+const boutique = await prisma.boutique.create({
   data: {
-    imageUrl: '/assets/concept1.png',
-    image1: '/assets/concept2.jpg',
-    image2: '/assets/concept2.jpg',
-    image3: '/assets/concept2.jpg',
-    image4: '/assets/concept2.jpg',
-    image5: '/assets/concept2.jpg',
-    image6: '/assets/concept2.jpg',
-    image7: '/assets/concept2.jpg',
-    image8: '/assets/concept2.jpg',
-    image9: '/assets/concept2.jpg',
-    image10: '/assets/concept2.jpg',
-    image11: '/assets/concept2.jpg',
-    image12: '/assets/concept2.jpg',
-    image13: '/assets/concept2.jpg',
-    image14: '/assets/concept2.jpg'
-   
+    imageUrl: '/assets/concept1.png'
   }
 });
+
+// Créer les sections de boutique par défaut
+await prisma.boutiqueSection.createMany({
+  data: [
+    {
+      boutiqueId: boutique.id,
+      title: 'Nos engagements quotidiens',
+      content: 'Respect de la dignité : chacun est accueilli comme une personne, pas comme un "bénéficiaire". \n Valorisation des talents : les bénévoles et clients sont reconnus pour leurs compétences. \n Accessibilité : vêtements triés par genre, taille, saison ; boutique claire et rangée ; horaires adaptés. \n Transparence et équité : chaque produit a un prix clair, chaque remise est justifiée.',
+      icon: '🤝',
+      color: 'white',
+      order: 7,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    },
+    {
+      boutiqueId: boutique.id,
+      title: 'Une organisation participative',
+      content: 'Nous croyons à la force du collectif : les usagers, bénévoles et clients sont invités chaque année à des réunions participatives pour faire évoluer la boutique. La parole est libre, les idées sont prises en compte, car le lieu appartient à tous.',
+      icon: '🤲',
+      color: 'green',
+      order: 6,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    },
+    {
+      boutiqueId: boutique.id,
+      title: 'Des bénévoles engagés et formés',
+      content: 'Chez Nouvoulook, le bénévolat n\'est pas réservé à quelques profils : tout le monde peut s\'y impliquer. Chaque bénévole est formé à nos valeurs (respect, accueil, dignité), et peut évoluer selon ses envies : aide en boutique, tri, accueil, animation, etc. Beaucoup d\'entre eux témoignent d\'une reprise de confiance et d\'une vraie fierté de contribuer à un projet utile et humain.',
+      icon: '🫂',
+      color: 'white',
+      order: 5,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    },
+    {
+      boutiqueId: boutique.id,
+      title: 'Une boutique vivante, qui s\'adapte et innove',
+      content: 'Des défilés et mises en avant stylistiques. Des ateliers couture pour apprendre ou transmettre. Des journées bien-être pour prendre soin de soi. Des événements éphémères et collaboratifs avec le quartier. Notre boutique n\'est pas figée : elle vit avec les gens qui la font vivre.',
+      icon: '💡',
+      color: 'blue',
+      order: 4,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    },
+    {
+      boutiqueId: boutique.id,
+      title: 'Une économie circulaire et humaine',
+      content: 'Chaque objet qui entre chez Nouvoulook suit un cycle vertueux : il est récupéré, restauré, réévalué, puis remis en circulation à prix solidaire. Ce système permet d\'éviter le gaspillage, de limiter les déchets et de proposer des produits de qualité, accessibles à tous.',
+      icon: '♻️',
+      color: 'pink',
+      order: 3,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    },
+    {
+      boutiqueId: boutique.id,
+      title: 'Acheter autrement : donner du sens à ses achats',
+      content: 'En achetant chez Nouvoulook, vous participez à un modèle qui allie écologie, solidarité et inclusion. Les vêtements sont soigneusement triés, rangés par taille et genre, toujours dans le respect des personnes. Ce n\'est pas un dépôt-vente, c\'est un lieu où l\'objet reprend vie avec dignité.',
+      icon: '🌱',
+      color: 'yellow',
+      order: 2,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    },
+    {
+      boutiqueId: boutique.id,
+      title: 'Notre boutique : un lieu solidaire, vivant et ouvert',
+      content: 'Chez Nouvoulook, tout le monde a sa place. Pas de guichet réservé, pas de regard différent selon votre situation. Ici, vous êtes un client, un acteur, un membre d\'une communauté. C\'est cette égalité de traitement, ce non-jugement fondamental, qui fait la force et la singularité de notre boutique.',
+      icon: '🤝',
+      color: 'green',
+      order: 1,
+      image1: '/assets/concept2.jpg',
+      image2: '/assets/concept2.jpg'
+    }
+  ]
+});
+
 }
 
 main()

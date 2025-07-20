@@ -14,6 +14,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.auth.getAccessToken();
     if (token) {
+      // Ne pas modifier les headers pour les requêtes multipart/form-data
+      const isMultipart = req.body instanceof FormData;
+      
       const cloned = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
@@ -28,7 +31,9 @@ export class AuthInterceptor implements HttpInterceptor {
                 switchMap((newAccessToken: string | null) => {
                   if (newAccessToken) {
                     const retried = req.clone({
-                      setHeaders: { Authorization: `Bearer ${newAccessToken}` }
+                      setHeaders: {
+                        Authorization: `Bearer ${newAccessToken}`
+                      }
                     });
                     return next.handle(retried);
                   } else {

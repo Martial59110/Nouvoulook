@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class CreateTimelineItemDto {
   @IsString()
@@ -6,4 +6,12 @@ export class CreateTimelineItemDto {
 
   @IsString()
   description: string;
+
+  @IsString()
+  @IsOptional()
+  icon?: string;
+
+  @IsString()
+  @IsOptional()
+  color?: string;
 } 

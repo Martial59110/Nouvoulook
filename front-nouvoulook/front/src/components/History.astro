@@ -3,12 +3,7 @@ import '../style/dons.css';
 
 const response = await fetch(`${import.meta.env.API_URL}/history`);
 const data = await response.json();
-const history = {
-  imageUrl: data[0]?.imageUrl || '',
-  textContent: data[0]?.textContent || '',
-  textContent2: data[0]?.textContent2 || '',
-  textContent3: data[0]?.textContent3 || ''
-};
+const history = data[0] || {};
 
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
 ---

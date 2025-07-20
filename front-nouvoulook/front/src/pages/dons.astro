@@ -29,6 +29,18 @@ const textDonation = {
   flyerPdfUrl: data[0]?.flyerPdfUrl || ''
 };
 
+// Récupérer les informations du PDF si il existe
+let pdfInfo = null;
+if (textDonation.flyerPdfUrl) {
+  try {
+    const pdfResponse = await fetch(`${import.meta.env.API_URL}/pdf-documents`);
+    const pdfs = await pdfResponse.json();
+    pdfInfo = pdfs.find((pdf: any) => pdf.url === textDonation.flyerPdfUrl);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations PDF:', error);
+  }
+}
+
 const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
 ---
 
@@ -103,7 +115,7 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
               <p class="mb-4">Retrouvez toutes les informations importantes sur notre flyer</p>
               {textDonation.flyerPdfUrl && (
                 <a href={textDonation.flyerPdfUrl.startsWith('/assets') ? `${apiUrl}${textDonation.flyerPdfUrl}` : textDonation.flyerPdfUrl} class="btn btn-primary btn-lg animate__animated animate__fadeInUp" style="background:#ffa14e; border-color:#ffa14e;" download>
-                  <i class="bi bi-download me-2"></i>Télécharger le flyer
+                  <i class="bi bi-download me-2"></i>{pdfInfo ? `Télécharger ${pdfInfo.name}` : 'Télécharger le flyer'}
                 </a>
               )}
             </div>
@@ -139,3 +151,4 @@ const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:3001';
     els.forEach(el => observer.observe(el));
   });
 </script>
+
