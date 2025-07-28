@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+
+// Récupération dynamique des mentions légales
+let legalMentions = null;
+try {
+  const res = await fetch('http://ts-api-nouvoulook:3001/legal-mentions');
+  legalMentions = await res.json();
+} catch (error) {
+  console.error('Erreur lors de la récupération des mentions légales:', error);
+}
+
+// Valeurs par défaut si l'API n'est pas disponible
+const raisonSociale = legalMentions?.raisonSociale || 'AIR ACCUEIL INSERTION RENCONTRE';
+const formeJuridique = legalMentions?.formeJuridique || 'Établissement de l\'association AIR ACCUEIL INSERTION RENCONTRE';
+const siegeSocial = legalMentions?.siegeSocial || '108 RUE JEAN-JACQUES ROUSSEAU (LOMME) 59000 LILLE';
+const siren = legalMentions?.siren || '378 809 867';
+const siret = legalMentions?.siret || '378 809 867 00021';
+const email = legalMentions?.email || 'nouvoulook@outlook.fr';
+const telephone = legalMentions?.telephone || '03 28 07 66 52';
+const directeurPublication = legalMentions?.directeurPublication || 'Mamadou DIEUDONNE';
+const hebergeur = legalMentions?.hebergeur || 'Hetzner Online AG – Stuttgarter St. 1 – 91710 Gunzenhausen – Allemagne';
+---
+
+<Layout 
+  title="Mentions légales - Nouvoulook"
+  description="Mentions légales de Nouvoulook, boutique solidaire à Marcq-en-Baroeul."
+  ogImage="/assets/logo-nouvoulook.png"
+  canonical="https://nouvoulook.fr/mentions-legales"
+>
+  <Header />
+  
+  <main class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="mb-4 text-center">MENTIONS LÉGALES</h1>
+        
+        <div class="mentions-container">
+          
+          <div class="mention-item">
+            <strong>Raison Sociale :</strong> {raisonSociale}
+          </div>
+          
+          <div class="mention-item">
+            <strong>Forme juridique :</strong> {formeJuridique}
+          </div>
+          
+          <div class="mention-item">
+            <strong>Siège social :</strong> {siegeSocial}
+          </div>
+          
+          <div class="mention-item">
+            <strong>SIREN :</strong> {siren}
+          </div>
+          
+          <div class="mention-item">
+            <strong>SIRET :</strong> {siret}
+          </div>
+          
+          <div class="mention-item">
+            <strong>Email :</strong> {email}
+          </div>
+          
+          <div class="mention-item">
+            <strong>Téléphone :</strong> {telephone}
+          </div>
+          
+          <div class="mention-item">
+            <strong>Directeur de publication :</strong> {directeurPublication}
+          </div>
+          
+          <div class="mention-item">
+            <strong>Hébergeur :</strong> {hebergeur}
+          </div>
+          
+        </div>
+        
+        <div class="text-center mt-5">
+          <p class="text-muted">
+            <small>Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</small>
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .mentions-container {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    color: #005009;
+    font-weight: 700;
+    font-size: 2.5rem;
+  }
+  
+  .mention-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e8ffe0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .mention-item:last-child {
+    border-bottom: none;
+  }
+  
+  .mention-item strong {
+    color: #005009;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 200px;
+  }
+  
+  .mention-item a {
+    color: #a4da47;
+    text-decoration: none;
+  }
+  
+  .mention-item a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .mention-item strong {
+      min-width: auto;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  }
+</style> 

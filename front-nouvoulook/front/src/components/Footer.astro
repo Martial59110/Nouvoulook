@@ -1,5 +1,16 @@
 ---
 const year = new Date().getFullYear();
+
+// Récupération dynamique des infos de contact
+let contact = null;
+try {
+  const res = await fetch('http://ts-api-nouvoulook:3001/contact-info');
+  contact = await res.json();
+} catch (error) {
+  console.error('Erreur lors de la récupération des informations de contact:', error);
+}
+
+const facebookUrl = contact?.facebookUrl || 'https://www.facebook.com/nouvoulook';
 ---
 <footer class="footer-site py-4 mt-5">
   <div class="container text-center">
@@ -10,6 +21,10 @@ const year = new Date().getFullYear();
       <a href="/contact" class="mx-2">Contact</a>
       <span class="mx-1 text-muted">|</span>
       <a href="/mentions-legales" class="mx-2">Mentions légales</a>
+      <span class="mx-1 text-muted">|</span>
+      <a href={facebookUrl} target="_blank" rel="noopener noreferrer" class="mx-2">
+        <i class="bi bi-facebook"></i> Facebook
+      </a>
     </div>
     <div class="footer-copyright">
       &copy; {year} Nouvoulook. Tous droits réservés.

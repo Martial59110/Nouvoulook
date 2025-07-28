@@ -143,6 +143,8 @@ model ContactInfo {
   phone       String   // Numéro affiché sur le site
   address     String   // Adresse affichée sur le site
   openingHours String?  // Horaires affichés sur le site
+  facebookUrl String?  // Lien Facebook affiché dans le footer
+  byAirUrl    String?  // Lien du logo By Air dans le header
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -208,4 +210,21 @@ model BoutiqueSection {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("boutique_sections")
+}
+
+model LegalMentions {
+  id                    String   @id @default(uuid())
+  raisonSociale         String   @map("raison_sociale")
+  formeJuridique        String   @map("forme_juridique")
+  siegeSocial           String   @map("siege_social")
+  siren                 String
+  siret                 String
+  email                 String
+  telephone             String
+  directeurPublication  String   @map("directeur_publication")
+  hebergeur             String
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@map("legal_mentions")
 }

@@ -100,6 +100,10 @@ async function main() {
     { role: 'admin', resource: 'boutique', action: 'read' },
     { role: 'admin', resource: 'boutique', action: 'update' },
     { role: 'admin', resource: 'boutique', action: 'delete' },
+    { role: 'admin', resource: 'legal-mentions', action: 'create' },
+    { role: 'admin', resource: 'legal-mentions', action: 'read' },
+    { role: 'admin', resource: 'legal-mentions', action: 'update' },
+    { role: 'admin', resource: 'legal-mentions', action: 'delete' },
   ];
 
   const userPermissions = [
@@ -112,6 +116,7 @@ async function main() {
     { role: 'user', resource: 'clothing-examples', action: 'create' },
     { role: 'user', resource: 'clothing-examples', action: 'read' },
     { role: 'user', resource: 'contact', action: 'read' },
+    { role: 'user', resource: 'legal-mentions', action: 'read' },
   ];
 
   for (const permission of [...adminPermissions, ...userPermissions]) {
@@ -274,7 +279,9 @@ async function main() {
       publicEmail: 'nouvoulook@outlook.fr',
       phone: '03 28 07 66 52',
       address: '65 Bd Clemenceau, 59700 Marcq-en-Barœul',
-      openingHours: 'Mardi au samedi : 14h - 18h.\nFermé dimanche et lundi'
+      openingHours: 'Mardi au samedi : 14h - 18h.\nFermé dimanche et lundi',
+      facebookUrl: 'https://www.facebook.com/nouvoulook',
+      byAirUrl: 'https://by-air.fr'
     }
   });
   await prisma.news.deleteMany();
@@ -358,6 +365,22 @@ await prisma.timelineItem.createMany({
     ]
   });
 
+  // Seed des mentions légales
+  await prisma.legalMentions.deleteMany();
+  await prisma.legalMentions.create({
+    data: {
+      raisonSociale: 'AIR ACCUEIL INSERTION RENCONTRE',
+      formeJuridique: 'Établissement de l\'association AIR ACCUEIL INSERTION RENCONTRE',
+      siegeSocial: '108 RUE JEAN-JACQUES ROUSSEAU (LOMME) 59000 LILLE',
+      siren: '378 809 867',
+      siret: '378 809 867 00021',
+      email: 'nouvoulook@outlook.fr',
+      telephone: '03 28 07 66 52',
+      directeurPublication: 'Mamadou DIEUDONNE',
+      hebergeur: 'Hetzner Online AG – Stuttgarter St. 1 – 91710 Gunzenhausen – Allemagne'
+    }
+  });
+
   // Seed des PDFs existants
   await prisma.pdfDocument.deleteMany();
   await prisma.pdfDocument.createMany({
@@ -373,6 +396,12 @@ await prisma.timelineItem.createMany({
         url: '/assets/volunteer-flyer-1747927818508.pdf',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        name: 'Fiche d\'adhésion',
+        url: '/assets/adhesion.pdf',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]
   });
@@ -383,7 +412,8 @@ await prisma.boutique.deleteMany();
 
 const boutique = await prisma.boutique.create({
   data: {
-    imageUrl: '/assets/concept1.png'
+    imageUrl: '/assets/concept1.png',
+    flyerPdfUrl: '/assets/adhesion.pdf'
   }
 });
 

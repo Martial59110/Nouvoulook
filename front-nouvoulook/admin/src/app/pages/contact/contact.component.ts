@@ -46,6 +46,16 @@ import { Router } from '@angular/router';
               <textarea id="openingHours" name="openingHours" class="form-control" rows="2" [(ngModel)]="contactInfo.openingHours"></textarea>
               <div class="form-text">Exemple : Mardi au samedi : 14h - 18h\nFermé dimanche et lundi</div>
             </div>
+            <div class="mb-3">
+              <label for="facebookUrl" class="form-label">Lien Facebook (footer)</label>
+              <input type="url" id="facebookUrl" name="facebookUrl" class="form-control" [(ngModel)]="contactInfo.facebookUrl" placeholder="https://www.facebook.com/nouvoulook" />
+              <div class="form-text">Lien vers la page Facebook affiché dans le footer</div>
+            </div>
+            <div class="mb-3">
+              <label for="byAirUrl" class="form-label">Lien du logo By Air (header)</label>
+              <input type="url" id="byAirUrl" name="byAirUrl" class="form-control" [(ngModel)]="contactInfo.byAirUrl" placeholder="https://www.by-air.fr" />
+              <div class="form-text">Lien vers le site By Air quand on clique sur le logo</div>
+            </div>
             <button type="submit" class="btn btn-primary" [disabled]="loading">{{ loading ? 'Enregistrement...' : 'Enregistrer' }}</button>
           </form>
           <div *ngIf="successMsg" class="alert alert-success mt-3">{{ successMsg }}</div>
@@ -62,7 +72,9 @@ export class ContactComponent implements OnInit {
     publicEmail: '',
     phone: '',
     address: '',
-    openingHours: ''
+    openingHours: '',
+    facebookUrl: '',
+    byAirUrl: ''
   };
   loading = false;
   successMsg = '';

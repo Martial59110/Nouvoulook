@@ -23,6 +23,7 @@ import { HistoryModule } from './history/history.module';
 import { TimelineItemModule } from './timeline-item/timeline-item.module';
 import { BoutiqueModule } from './boutique/boutique.module';
 import { PdfDocumentsModule } from './pdf-documents/pdf-documents.module';
+import { LegalMentionsModule } from './legal-mentions/legal-mentions.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { PdfDocumentsModule } from './pdf-documents/pdf-documents.module';
     TimelineItemModule,
     BoutiqueModule,
     PdfDocumentsModule,
+    LegalMentionsModule,
   ],
   controllers: [AppController],
   providers: [

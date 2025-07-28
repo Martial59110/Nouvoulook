@@ -2,6 +2,16 @@
 const logoPath = "/assets/logo-nouvoulook.png";
 const logoAirPath = "/assets/by-air.png";
 
+// Récupération dynamique des infos de contact
+let contact = null;
+try {
+  const res = await fetch('http://ts-api-nouvoulook:3001/contact-info');
+  contact = await res.json();
+} catch (error) {
+  console.error('Erreur lors de la récupération des informations de contact:', error);
+}
+
+const byAirUrl = contact?.byAirUrl || 'https://by-air.fr';
 ---
 
 <!-- Composant pour afficher le header (logo, menu, bouton) -->
@@ -11,7 +21,9 @@ const logoAirPath = "/assets/by-air.png";
     <a class="navbar-brand d-flex flex-column align-items-center justify-content-center" href="/">
      
       <span class="fw-bold" style="font-size:2.2rem; background: linear-gradient(90deg, #ffe066, #f76707, #d72660); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Nouvoulook</span>
-      <img src={logoAirPath} alt="by AIR" style="height: 24px; margin-top: 0.1rem; display: block;" class="header-byair-img" id="header-byair-img" />
+      <a href={byAirUrl} target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+        <img src={logoAirPath} alt="by AIR" style="height: 24px; margin-top: 0.1rem; display: block; transition: transform 0.3s ease, filter 0.3s ease;" class="header-byair-img" id="header-byair-img" />
+      </a>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -44,3 +56,14 @@ const logoAirPath = "/assets/by-air.png";
     }
   });
 </script>
+
+<style>
+  .header-byair-img {
+    cursor: pointer;
+  }
+  
+  .header-byair-img:hover {
+    transform: scale(1.15);
+    filter: brightness(1.1);
+  }
+</style>

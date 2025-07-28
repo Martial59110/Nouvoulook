@@ -21,6 +21,7 @@
         <li class="nav-item" *ngIf="hasAccess('contact')"><a routerLink="contact" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">email</span> Contact</a></li>
         <li class="nav-item" *ngIf="hasAccess('history')"><a routerLink="history" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">history_edu</span> Histoire</a></li>
         <li class="nav-item" *ngIf="hasAccess('boutique')"><a routerLink="boutique" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">storefront</span> Boutique</a></li>
+        <li class="nav-item" *ngIf="hasAccess('legal-mentions')"><a routerLink="legal-mentions" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">gavel</span> Mentions Légales</a></li>
       </ul>
       <button class="btn btn-outline-secondary w-100 mb-2" routerLink="settings" routerLinkActive="active" (click)="sidebarOpen = false"><span class="material-icons">settings</span> Paramètres</button>
     </nav>
@@ -49,6 +50,7 @@
           <li class="nav-item" *ngIf="hasAccess('contact')"><a routerLink="contact" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">email</span> Contact</a></li>
           <li class="nav-item" *ngIf="hasAccess('history')"><a routerLink="history" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">history_edu</span> Histoire</a></li>
           <li class="nav-item" *ngIf="hasAccess('boutique')"><a routerLink="boutique" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">storefront</span> Boutique</a></li>
+          <li class="nav-item" *ngIf="hasAccess('legal-mentions')"><a routerLink="legal-mentions" routerLinkActive="active" class="nav-link" (click)="sidebarOpen = false"><span class="material-icons">gavel</span> Mentions Légales</a></li>
         </ul>
         <button class="btn btn-outline-secondary w-100 mb-2" routerLink="settings" routerLinkActive="active" (click)="sidebarOpen = false"><span class="material-icons">settings</span> Paramètres</button>
         <button class="btn btn-primary logout-btn w-100 mt-3" (click)="logout()">Déconnexion</button>
